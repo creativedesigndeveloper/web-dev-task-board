@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { setCredentials } from "@/store/authSlice"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
+import { useNavigate } from "react-router-dom"
 
 const LoginPage = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -17,6 +19,8 @@ const LoginPage = () => {
       user: mockUser,
       token: mockToken
     }))
+    navigate('/dashboard')
+
     setEmail('')
     setPassword('')
   }

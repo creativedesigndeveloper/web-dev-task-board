@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/ProtectedRoute";
 import DashBoard from "@/pages/Dashboard";
 import LoginPage from "@/pages/LoginPage";
 import NotFound from "@/pages/NotFound";
@@ -9,8 +10,13 @@ const router = createBrowserRouter([
     element: <LoginPage />
   },
   {
-    path: '/dashboard',
-    element: <DashBoard />
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: '/dashboard',
+        element: <DashBoard />
+      }
+    ]
   },
   {
     path: '*',
