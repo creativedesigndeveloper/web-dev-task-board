@@ -12,3 +12,8 @@ export interface SubTask {
   title: string
   isCompleted: boolean
 }
+
+export interface TaskState {
+  tasks: Task[]
+  selectedTask: Task | null
+}
