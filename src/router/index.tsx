@@ -9,11 +9,11 @@ const router = createBrowserRouter([
     element: <LoginPage />
   },
   {
-    path: '/',
+    path: '/dashboard',
     element: <DashBoard />
   },
   {
-    path: '/',
+    path: '*',
     element: <NotFound />
   }
 ])
