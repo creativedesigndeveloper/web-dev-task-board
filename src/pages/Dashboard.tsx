@@ -4,11 +4,9 @@ import { useNavigate } from "react-router-dom"
 
 const DashBoard = () => {
   const userName = useAppSelector((state) => state.auth.user?.name)
-  const email = useAppSelector((state) => state.auth.user?.email)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const userLogout = () => {
-    console.log(userName)
     dispatch(logout())
     navigate('/')
   }
@@ -16,7 +14,7 @@ const DashBoard = () => {
 
   return (
     <>
-      <h1>{`Hello ${userName} with email ${email} `}</h1>
+      <h1>{`Welcome ${userName} to the Web Dev Task Board`}</h1>
       <button onClick={userLogout}>Logout</button>
     </>
   )

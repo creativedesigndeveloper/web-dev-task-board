@@ -12,7 +12,6 @@ const LoginPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log(email, password)
     const mockUser = { id: 1, name: "Test User", email }
     const mockToken = "mock-jwt-token-123"
     dispatch(setCredentials({
@@ -20,7 +19,6 @@ const LoginPage = () => {
       token: mockToken
     }))
     navigate('/dashboard')
-
     setEmail('')
     setPassword('')
   }
