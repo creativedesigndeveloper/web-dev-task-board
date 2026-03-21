@@ -10,14 +10,15 @@ interface TaskCardProps {
 
 export const TaskCard = ({ task }: TaskCardProps) => {
   const dispatch = useAppDispatch()
-  const onDelete = (() => {
+  const onDelete = () => {
     dispatch(deleteTask(task.id))
-  });
-  <>
+  };
+  return (<>
     <h2>{task.title}</h2>
     <p>{task.category}</p>
     <p>{task.priority}</p>
-    <p>{`${task.subTasks.filter(subtask => subtask.isCompleted === true)}/${task.subTasks.length}`}</p>
+    <p>{`${task.subTasks.filter(subtask => subtask.isCompleted).length}/${task.subTasks.length}`}</p>
     <button onClick={onDelete}>Delete</button>
   </>
+  )
 }

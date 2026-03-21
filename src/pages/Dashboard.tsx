@@ -1,3 +1,4 @@
+import { AddTaskForm } from "@/components/AddTaskForm"
 import { TaskCard } from "@/components/TaskCard"
 import { useAppSelector } from "@/hooks/useAppDispatch"
 
@@ -9,6 +10,8 @@ const DashBoard = () => {
 
   return (
     <>
+      <AddTaskForm />
+
       <div>
         <h2>To Do</h2>
         <h4>{todoTasks.length}</h4>
