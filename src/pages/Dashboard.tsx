@@ -1,21 +1,25 @@
-import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
-import { logout } from "@/store/authSlice"
-import { useNavigate } from "react-router-dom"
+import { useAppSelector } from "@/hooks/useAppDispatch"
 
 const DashBoard = () => {
-  const userName = useAppSelector((state) => state.auth.user?.name)
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const userLogout = () => {
-    dispatch(logout())
-    navigate('/')
-  }
+  const todoTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'todo'))
+  const inProgressTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'inProgress'))
+  const completeTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'complete'))
 
 
   return (
     <>
-      <h1>{`Welcome ${userName} to the Web Dev Task Board`}</h1>
-      <button onClick={userLogout}>Logout</button>
+      <div>
+        <h2>To Do</h2>
+        <h4>{todoTasks.length}</h4>
+      </div>
+      <div>
+        <h2>In Progress</h2>
+        <h4>{inProgressTasks.length}</h4>
+      </div>
+      <div>
+        <h2>Complete</h2>
+        <h4>{completeTasks.length}</h4>
+      </div>
     </>
   )
 }
