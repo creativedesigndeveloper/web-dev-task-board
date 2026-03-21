@@ -23,6 +23,10 @@ export const AddTaskForm = () => {
       category: category,
       subTasks: []
     }))
+    setText('')
+    setCategory('')
+    setStatus('todo')
+    setPriority('lowPriority')
   }
 
   return (
