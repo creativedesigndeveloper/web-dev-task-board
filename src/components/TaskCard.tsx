@@ -2,6 +2,7 @@ import type { Task } from "@/types/Task";
 import { setSelectedTask } from "@/store/taskSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useDraggable } from "@dnd-kit/core";
+import { motion } from 'framer-motion'
 
 interface TaskCardProps {
   task: Task
@@ -28,18 +29,31 @@ export const TaskCard = ({ task }: TaskCardProps) => {
 
 
   return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.2 }}
+    >
 
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners} className="bg-bg-card rounded-xl p-4 mb-3 border border-purple-accent" onClick={() => dispatch(setSelectedTask(task))}>
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-text-primary font-bold">{task.title}</h3>
-        <span className={`w-3 h-3 rounded-full ${priorityColour[task.priority]}`} />
+
+      <div
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        className="bg-bg-card rounded-xl p-4 mb-3 border border-purple-accent" onClick={() => dispatch(setSelectedTask(task))}>
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-text-primary font-bold">{task.title}</h3>
+          <div className="flex items-center gap-2 ml-auto">
+            <span {...listeners} className="cursor-grab text-text-secondary px-1">⠿</span>
+            <span className={`w-3 h-3 rounded-full ${priorityColour[task.priority]}`} />
+
+          </div>
+        </div>
+        <span className="text-xs bg-purple-accent text-white px-2 py-1 rounded-lg">{task.category}</span>
       </div>
-      <span className="text-xs bg-purple-accent text-white px-2 py-1 rounded-lg">{task.category}</span>
 
-    </div>
+    </motion.div>
+
   )
 }

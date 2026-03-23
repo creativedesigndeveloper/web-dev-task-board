@@ -6,6 +6,7 @@ import { updateTask } from "@/store/taskSlice"
 import { DndContext, type DragEndEvent } from "@dnd-kit/core"
 import { KanbanColumn } from "@/components/KanbanColumn"
 import PomodoroTimer from "@/components/PomodoroTimer"
+import { motion, AnimatePresence } from "framer-motion"
 
 const DashBoard = () => {
   const todoTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'todo'))
@@ -42,7 +43,19 @@ const DashBoard = () => {
         <DndContext onDragEnd={handleDragEnd}>
           <main className="flex-1 p-6">
             <PomodoroTimer />
-            <div className="flex gap-6 text-text-primary">
+            <motion.div
+              className="flex gap-6 text-text-primary"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: {
+                  transition: {
+                    staggerChildren: 0.15
+                  }
+                }
+              }}
+
+            >
               <KanbanColumn id="todo" title="To Do" count={todoTasks.length}>
                 {todoTasks.map(task => (
                   <TaskCard key={task.id} task={task} />
@@ -58,11 +71,13 @@ const DashBoard = () => {
                   <TaskCard key={task.id} task={task} />
                 ))}
               </KanbanColumn>
-            </div>
+            </motion.div>
           </main>
         </DndContext>
       </div>
-      <TaskModal />
+      <AnimatePresence>
+        <TaskModal />
+      </AnimatePresence>
     </>
   )
 }
