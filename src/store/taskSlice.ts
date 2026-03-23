@@ -1,4 +1,4 @@
-import type { SubTask, Task, TaskState } from "@/types/Task"
+import type { Task, TaskState } from "@/types/Task"
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
 const initialState: TaskState = {
@@ -31,9 +31,12 @@ export const taskSlice = createSlice({
         state.tasks[parentId].subTasks[subId].isCompleted = !state.tasks[parentId].subTasks[subId].isCompleted
       }
     },
+    setSelectedTask: (state, action: PayloadAction<Task | null>) => {
+      state.selectedTask = action.payload
+    }
   }
 })
 
-export const {addTask, deleteTask, updateTask, toggleSubTask} = taskSlice.actions
+export const {addTask, deleteTask, updateTask, toggleSubTask, setSelectedTask} = taskSlice.actions
 export default taskSlice.reducer
 
