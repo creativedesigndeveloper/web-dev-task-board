@@ -33,7 +33,7 @@ export const taskSlice = createSlice({
     },
     setSelectedTask: (state, action: PayloadAction<Task | null>) => {
       state.selectedTask = action.payload
-    }
+    },
   }
 })
 

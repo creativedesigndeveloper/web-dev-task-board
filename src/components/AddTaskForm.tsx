@@ -2,8 +2,11 @@ import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { addTask } from "@/store/taskSlice"
 import { useState } from "react"
 
-export const AddTaskForm = () => {
+interface AddTaskFormProps {
+  onClose: () => void
+}
 
+export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
   const [text, setText] = useState('')
   const [category, setCategory] = useState('')
   const [status, setStatus] = useState<'todo' | 'inProgress' | 'complete'>('todo')
@@ -23,6 +26,7 @@ export const AddTaskForm = () => {
       category: category,
       subTasks: []
     }))
+    onClose()
     setText('')
     setCategory('')
     setStatus('todo')
@@ -31,36 +35,43 @@ export const AddTaskForm = () => {
 
   return (
     <>
-      <h1>Task Form</h1>
-      <form onSubmit={onSubmit}>
-        <div>
-          <h3>Enter Task</h3>
-          <input type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter Task" />
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="bg-bg-card rounded-xl p-6 w-96 text-text-primary text-center">
+          <h1 className="text-3xl m-3 mt-0 text-bold bg-purple-dark/30 rounded-2xl p-2">Task Form</h1>
+          <form onSubmit={onSubmit}>
+            <div className="mb-2">
+              <h3 className="bg-purple-accent rounded-2xl">Task</h3>
+              <input className="p-2 m-2 bg-bg-secondary rounded-lg text-text-primary w-full" type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter Task" />
+            </div>
+            <div className="mb-2">
+              <h3 className="bg-purple-accent rounded-2xl">Category</h3>
+              <input className="p-2 m-2 bg-bg-secondary rounded-lg text-text-primary w-full" type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Enter Category" />
+            </div>
+            <div className="mb-2">
+              <h3 className="bg-purple-accent rounded-2xl">Status</h3>
+              <select className="p-2 m-2" name="task-status" value={status} onChange={(e) => setStatus((e.target as HTMLSelectElement).value as 'todo' | 'inProgress' | 'complete')}>
+                <option value='todo'>To Do</option>
+                <option value='inProgress'>In Progress</option>
+                <option value='complete'>Complete</option>
+              </select>
+            </div>
+            <div className="mb-2">
+              <h3 className=" bg-purple-accent rounded-2xl">Priority</h3>
+              <select className="m-2 p-2" name="task-priority" value={priority} onChange={(e) => setPriority((e.target as HTMLSelectElement).value as 'lowPriority' | 'midPriority' | 'highPriority')}>
+                <option value='lowPriority'>Low Priority</option>
+                <option value='midPriority'>Medium Priority</option>
+                <option value='highPriority'>High Priority</option>
+              </select>
+            </div>
+            <div>
+              <button className="bg-purple-accent p-7 pt-0 pb-0 rounded-full mt-5" type="submit">Submit</button>
+            </div>
+            <div>
+              <button className="bg-red-500 p-3 pt-0 pb-0 mt-7 rounded-full" type="button" onClick={onClose}>Cancel</button>
+            </div>
+          </form>
         </div>
-        <div>
-          <h3>Category</h3>
-          <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Enter Category" />
-        </div>
-        <div>
-          <h3>Status</h3>
-          <select name="task-status" value={status} onChange={(e) => setStatus((e.target as HTMLSelectElement).value as 'todo' | 'inProgress' | 'complete')}>
-            <option value='todo'>To Do</option>
-            <option value='inProgress'>In Progress</option>
-            <option value='complete'>Complete</option>
-          </select>
-        </div>
-        <div>
-          <h3>Priority</h3>
-          <select name="task-priority" value={priority} onChange={(e) => setPriority((e.target as HTMLSelectElement).value as 'lowPriority' | 'midPriority' | 'highPriority')}>
-            <option value='lowPriority'>Low Priority</option>
-            <option value='midPriority'>Medium Priority</option>
-            <option value='highPriority'>High Priority</option>
-          </select>
-        </div>
-        <div>
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+      </div>
     </>
   )
 }
