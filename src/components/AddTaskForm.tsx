@@ -1,6 +1,6 @@
-import { useAppDispatch } from "@/hooks/useAppDispatch"
+import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { addTask } from "@/store/taskSlice"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 interface AddTaskFormProps {
   onClose: () => void
@@ -11,6 +11,7 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
   const [category, setCategory] = useState('')
   const [status, setStatus] = useState<'todo' | 'inProgress' | 'complete'>('todo')
   const [priority, setPriority] = useState<'highPriority' | 'midPriority' | 'lowPriority'>('lowPriority')
+  const tasks = useAppSelector(state => state.task.tasks)
 
 
   const dispatch = useAppDispatch()
@@ -32,6 +33,12 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
     setStatus('todo')
     setPriority('lowPriority')
   }
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+  }, [tasks])
+
+
 
   return (
     <>

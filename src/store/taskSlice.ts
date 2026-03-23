@@ -1,8 +1,14 @@
 import type { Task, TaskState } from "@/types/Task"
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
+
+const loadTasks = () => {
+  const saved = localStorage.getItem('tasks')
+  return saved ? JSON.parse(saved) : []
+}
+
 const initialState: TaskState = {
-  tasks: [],
+  tasks: loadTasks(),
   selectedTask: null
 }
 
@@ -18,7 +24,7 @@ export const taskSlice = createSlice({
     },
     updateTask: (state, action: PayloadAction<Task>) => {
       const index = state.tasks.findIndex(task => task.id === action.payload.id)
-
+      
       if(index !== -1) {
         state.tasks[index] = action.payload
       }
@@ -26,7 +32,7 @@ export const taskSlice = createSlice({
     toggleSubTask: (state, action: PayloadAction<{taskId: string, subTaskId: string}>) => {
       const parentId = state.tasks.findIndex(task => task.id === action.payload.taskId)
       const subId = state.tasks[parentId].subTasks.findIndex(task => task.id === action.payload.subTaskId)
-
+      
       if(subId !== -1) {
         state.tasks[parentId].subTasks[subId].isCompleted = !state.tasks[parentId].subTasks[subId].isCompleted
       }

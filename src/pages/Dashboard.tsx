@@ -7,11 +7,14 @@ import { DndContext, type DragEndEvent } from "@dnd-kit/core"
 import { KanbanColumn } from "@/components/KanbanColumn"
 import PomodoroTimer from "@/components/PomodoroTimer"
 import { motion, AnimatePresence } from "framer-motion"
+import { useEffect } from "react"
 
 const DashBoard = () => {
   const todoTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'todo'))
   const inProgressTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'inProgress'))
   const completeTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'complete'))
+
+  const tasks = useAppSelector((state) => state.task.tasks)
 
   const dispatch = useAppDispatch()
 
@@ -32,6 +35,10 @@ const DashBoard = () => {
       dispatch(updateTask({ ...task, status: newStatus }))
     }
   }
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+  }, [tasks])
 
 
 
