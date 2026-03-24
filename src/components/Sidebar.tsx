@@ -1,6 +1,9 @@
 import { useNavigate, useLocation } from "react-router-dom"
 import { useState } from "react"
 import { AddTaskForm } from "./AddTaskForm"
+import { logoutUser } from "@/api/authApi"
+import { useAppDispatch } from "@/hooks/useAppDispatch"
+import { logout } from "@/store/authSlice"
 
 
 
@@ -10,9 +13,16 @@ export const Sidebar = () => {
 
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useAppDispatch()
 
   const navClass = (path: string) =>
     `${location.pathname === path ? 'bg-purple-accent' : 'bg-bg-secondary'} mb-2 p-2 rounded-e-md`
+
+  const signOut = async () => {
+    await logoutUser()
+    dispatch(logout())
+    navigate('/')
+  }
 
 
   return (
@@ -34,6 +44,9 @@ export const Sidebar = () => {
           </div>
         </div>
         <button className="text-text-primary bg-purple-accent rounded-full p-2 m-1 pointer-coarse" onClick={() => setShowAddTask(true)}>+ New Task</button>
+        <div>
+          <button className="text-text-primary bg-purple-dark rounded-full p-4 py-0 mt-5 ml-3 cursor-pointer" onClick={signOut}>Logout</button>
+        </div>
 
         {showAddTask && <AddTaskForm onClose={() => setShowAddTask(false)} />}
       </div>
