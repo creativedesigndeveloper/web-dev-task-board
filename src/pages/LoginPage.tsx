@@ -2,25 +2,34 @@ import { useState } from "react"
 import { setCredentials } from "@/store/authSlice"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { useNavigate } from "react-router-dom"
+import { signInUser } from "@/api/authApi"
 
 const LoginPage = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const mockUser = { id: 1, name: "Test User", email }
-    const mockToken = "mock-jwt-token-123"
-    dispatch(setCredentials({
-      user: mockUser,
-      token: mockToken
-    }))
-    navigate('/dashboard')
-    setEmail('')
-    setPassword('')
+    try {
+      const { user, token } = await signInUser(email, password)
+      dispatch(setCredentials({
+        user: {
+          id: user.uid,
+          email: user.email ?? '',
+          name: user.displayName ?? ''
+        },
+        token
+      }))
+      navigate('/dashboard')
+      setEmail('')
+      setPassword('')
+    } catch (err) {
+      setError('Invalid email or password, please try again')
+    }
   }
 
   return (
@@ -41,9 +50,12 @@ const LoginPage = () => {
             placeholder="Enter password" />
         </div>
         <div>
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+        </div>
+        <div>
           <button type="submit">Submit</button>
         </div>
-
+        <p onClick={() => navigate('/register')} className="cursor-pointer text-purple-accent">Don't have an account? Sign up here</p>
       </form>
     </div>
   )
