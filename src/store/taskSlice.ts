@@ -1,4 +1,4 @@
-import type { Task, TaskState } from "@/types/Task"
+import type { SubTask, Task, TaskState } from "@/types/Task"
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
 
@@ -40,9 +40,15 @@ export const taskSlice = createSlice({
     setSelectedTask: (state, action: PayloadAction<Task | null>) => {
       state.selectedTask = action.payload
     },
+    addSubTask: (state, action: PayloadAction<{taskId: string, subTask: SubTask}>) => {
+      const task = state.tasks.find(task => task.id === action.payload.taskId)
+      if(task) {
+        task.subTasks.push(action.payload.subTask)
+      }
+    }
   }
 })
 
-export const {addTask, deleteTask, updateTask, toggleSubTask, setSelectedTask} = taskSlice.actions
+export const {addTask, deleteTask, updateTask, toggleSubTask, setSelectedTask, addSubTask} = taskSlice.actions
 export default taskSlice.reducer
 

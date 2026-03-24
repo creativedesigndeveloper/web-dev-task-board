@@ -1,6 +1,7 @@
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
-import { deleteTask, setSelectedTask, toggleSubTask } from "@/store/taskSlice";
+import { addSubTask, deleteTask, setSelectedTask, toggleSubTask } from "@/store/taskSlice";
 import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from "react";
 
 const priorityColour = {
   highPriority: 'bg-priority-high',
@@ -10,9 +11,25 @@ const priorityColour = {
 
 
 export const TaskModal = () => {
-  const selectedTask = useAppSelector(state => state.task.selectedTask)
+  const selectedTaskId = useAppSelector(state => state.task.selectedTask?.id)
+  const selectedTask = useAppSelector((state) => state.task.tasks.find(task => task.id === selectedTaskId))
   const dispatch = useAppDispatch()
+  const [newSubTask, setNewSubTask] = useState('')
 
+  const onAddSubTask = () => {
+    if (!newSubTask.trim()) return
+    if (!selectedTask) return
+
+    dispatch(addSubTask({
+      taskId: selectedTask.id,
+      subTask: {
+        id: crypto.randomUUID(),
+        title: newSubTask,
+        isCompleted: false
+      }
+    }))
+    setNewSubTask('')
+  }
 
   const onDelete = () => {
     if (!selectedTask) return null
@@ -23,6 +40,7 @@ export const TaskModal = () => {
   const onClose = () => {
     dispatch(setSelectedTask(null))
   }
+
 
   return (
     <AnimatePresence>
@@ -57,6 +75,16 @@ export const TaskModal = () => {
               </div>
 
             ))}
+            <div className="flex gap-2 mt-3">
+              <input
+                type="text"
+                value={newSubTask}
+                onChange={(e) => setNewSubTask(e.target.value)}
+                placeholder="Add subtask..."
+                className="bg-bg-secondary text-text-primary rounded-lg p-2 flex-1"
+              />
+              <button className="bg-bg-secondary text-white px-3 rounded-lg" onClick={onAddSubTask}>Add</button>
+            </div>
             <div>
               <button className="bg-red-600 px-2 rounded-full mt-2 mb-2 text-text-primary" onClick={onDelete}>Delete</button>
             </div>
