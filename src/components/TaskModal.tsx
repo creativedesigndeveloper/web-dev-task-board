@@ -1,5 +1,5 @@
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
-import { addSubTask, deleteTask, setSelectedTask, toggleSubTask } from "@/store/taskSlice";
+import { addSubTask, deleteTask, setSelectedTask, toggleSubTask, updateTask } from "@/store/taskSlice";
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from "react";
 
@@ -11,10 +11,17 @@ const priorityColour = {
 
 
 export const TaskModal = () => {
-  const selectedTaskId = useAppSelector(state => state.task.selectedTask?.id)
-  const selectedTask = useAppSelector((state) => state.task.tasks.find(task => task.id === selectedTaskId))
+  const selectedTask = useAppSelector((state) => state.task.selectedTask)
   const dispatch = useAppDispatch()
   const [newSubTask, setNewSubTask] = useState('')
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedTask, setIsEditedTask] = useState({
+    title: selectedTask?.title,
+    category: selectedTask?.category,
+    status: selectedTask?.status,
+    priority: selectedTask?.priority,
+    subTasks: selectedTask?.subTasks
+  })
 
   const onAddSubTask = () => {
     if (!newSubTask.trim()) return
@@ -29,6 +36,30 @@ export const TaskModal = () => {
       }
     }))
     setNewSubTask('')
+  }
+
+  const editMode = () => {
+    setIsEditedTask({
+      title: selectedTask?.title ?? '',
+      category: selectedTask?.category ?? '',
+      status: selectedTask?.status ?? 'todo',
+      priority: selectedTask?.priority ?? 'lowPriority',
+      subTasks: selectedTask?.subTasks ?? [],
+    })
+    setIsEditing(true)
+    return
+  }
+
+  const onSave = () => {
+    dispatch(updateTask({
+      ...selectedTask,
+      ...editedTask
+    }))
+    setIsEditing(false)
+  }
+
+  const onCancel = () => {
+    setIsEditing(false)
   }
 
   const onDelete = () => {
@@ -56,39 +87,96 @@ export const TaskModal = () => {
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="bg-bg-card rounded-xl p-6 w-96">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-text-primary font-bold text-2xl">{selectedTask.title}</h3>
-              <span className={`w-3 h-3 rounded-full ${priorityColour[selectedTask.priority]}`} />
-            </div>
-            <span className="text-xs bg-purple-accent text-white px-2 py-1 rounded-lg">{selectedTask.category}</span>
-            {selectedTask.subTasks.map(subtask => (
-              <div key={subtask.id} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={subtask.isCompleted}
-                  onChange={() => dispatch(toggleSubTask({
-                    taskId: selectedTask.id,
-                    subTaskId: subtask.id
-                  }))}
-                />
-                <span className="text-text-primary">{subtask.title}</span>
-              </div>
+            {isEditing === true ? <>
+              <div className="mb-6">
+                <div>
+                  <h1 className="text-text-primary bg-bg-secondary text-center px-3 mb-5 rounded-2xl">Edit Task</h1>
+                </div>
+                <div>
+                  <h2 className="text-text-primary px-2 my-2 bg-purple-dark rounded-2xl">Task Name</h2>
+                  <input type="text"
+                    value={editedTask.title}
+                    onChange={(e) => setIsEditedTask(prev => ({ ...prev, title: e.target.value }))}
 
-            ))}
-            <div className="flex gap-2 mt-3">
-              <input
-                type="text"
-                value={newSubTask}
-                onChange={(e) => setNewSubTask(e.target.value)}
-                placeholder="Add subtask..."
-                className="bg-bg-secondary text-text-primary rounded-lg p-2 flex-1"
-              />
-              <button className="bg-bg-secondary text-white px-3 rounded-lg" onClick={onAddSubTask}>Add</button>
-            </div>
-            <div>
-              <button className="bg-red-600 px-2 rounded-full mt-2 mb-2 text-text-primary" onClick={onDelete}>Delete</button>
-            </div>
-            <button className="bg-purple-dark px-2 rounded-full mt-5 text-text-primary" onClick={onClose}>Close</button>
+                    placeholder="Add Task"
+                    className="bg-bg-secondary text-text-primary"
+                  />
+                </div>
+                <div>
+                  <h2 className="text-text-primary px-2 my-2 bg-purple-dark rounded-2xl">Category</h2>
+                  <input type="text"
+                    value={editedTask.category}
+                    onChange={(e) => setIsEditedTask((prev) => ({ ...prev, category: e.target.value }))}
+                    placeholder="Add Category"
+                    className="bg-bg-secondary text-text-primary"
+                  />
+                </div>
+                <div>
+                  <h2 className="text-text-primary px-2 my-2 bg-purple-dark rounded-2xl">Status</h2>
+                  <select value={editedTask.status} onChange={(e) => setIsEditedTask((prev) => ({ ...prev, status: (e.target as HTMLSelectElement).value as 'todo' | 'inProgress' | 'complete' }))} className="bg-bg-secondary text-text-primary">
+                    <option value="todo">To Do</option>
+                    <option value="inProgress">In Progress</option>
+                    <option value="complete">Complete</option>
+                  </select>
+                </div>
+                <div>
+                  <h2 className="text-text-primary px-2 my-2 bg-purple-dark rounded-2xl">Priority</h2>
+                  <select value={editedTask.priority} onChange={(e) => setIsEditedTask((prev) => ({ ...prev, priority: (e.target as HTMLSelectElement).value as 'lowPriority' | 'midPriority' | 'highPriority' }))} className="bg-bg-secondary text-text-primary">
+                    <option value="lowPriority">Low Priority</option>
+                    <option value="midPriority">Medium Priority</option>
+                    <option value="highPriority">High Priority</option>
+                  </select>
+                </div>
+
+              </div>
+              <div className="text-center">
+                <button onClick={onSave} className="text-black bg-green-400 px-4 my-2 rounded-2xl">Submit</button>
+                <button onClick={onCancel} className="text-text-primary bg-red-500 px-4 my-2 mx-2 rounded-2xl">Cancel</button>
+              </div>
+            </> :
+              <>
+
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-text-primary font-bold text-2xl">{selectedTask.title}</h3>
+                  <span className={`w-3 h-3 rounded-full ${priorityColour[selectedTask.priority]}`} />
+                </div>
+                <span className="text-xs bg-purple-accent text-white px-2 py-1 rounded-lg">{selectedTask.category}</span>
+                <button onClick={editMode} className="text-xs bg-orange-400 text-text-primary px-4 my-2 mx-2 rounded-2xl cursor-pointer">Edit</button>
+                {selectedTask?.subTasks.map((subtask) => (
+
+                  <div key={selectedTask.id} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={subtask.isCompleted}
+                      onChange={() => dispatch(toggleSubTask({
+                        taskId: selectedTask.id,
+                        subTaskId: subtask.id
+                      }))}
+                    />
+                    <span className="text-text-primary">{subtask.title}</span>
+                  </div>
+
+                ))}
+                <div className="flex gap-2 mt-3">
+                  <input
+                    type="text"
+                    value={newSubTask}
+                    onChange={(e) => {
+                      setNewSubTask(e.target.value)
+                    }}
+                    placeholder="Add subtask..."
+                    className="bg-bg-secondary text-text-primary rounded-lg p-2 flex-1"
+                  />
+                  <button className="bg-bg-secondary text-white px-3 rounded-lg" onClick={onAddSubTask}>Add</button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <button className="bg-red-600 px-2 rounded-full mt-4 mb-2 text-text-primary cursor-pointer" onClick={onDelete}>Delete</button>
+                  <button className="bg-purple-dark px-2 rounded-full mt-4 text-text-primary cursor-pointer" onClick={onClose}>Close</button>
+                </div>
+              </>
+
+            }
+
 
           </motion.div>
         </motion.div>

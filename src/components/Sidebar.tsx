@@ -39,6 +39,9 @@ export const Sidebar = () => {
           <div className={navClass('/templates')}>
             <h4 onClick={() => navigate('/templates')}>Templates</h4>
           </div>
+          <div className={navClass('/focus')}>
+            <h4 onClick={() => navigate('/focus')}>Focus</h4>
+          </div>
           <div className={navClass('/settings')}>
             <h4 onClick={() => navigate('/settings')}>Settings</h4>
           </div>

@@ -1,5 +1,6 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import DashBoard from "@/pages/Dashboard";
+import FocusPage from "@/pages/FocusPage";
 import LoginPage from "@/pages/LoginPage";
 import NotFound from "@/pages/NotFound";
 import Projects from "@/pages/Projects";
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/settings',
         element: <Settings />
+      },
+      {
+        path: '/focus',
+        element: <FocusPage />
       }
     ]
   },

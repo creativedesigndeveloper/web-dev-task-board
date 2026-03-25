@@ -65,17 +65,26 @@ const DashBoard = () => {
             >
               <KanbanColumn id="todo" title="To Do" count={todoTasks.length}>
                 {todoTasks.map(task => (
-                  <TaskCard key={task.id} task={task} />
+                  <TaskCard key={task.id} task={task}
+                    {...task.subTasks.map(subtask => (
+                      <div key={subtask.id}>{subtask.title}</div>
+                    ))}
+                  />
                 ))}
               </KanbanColumn>
               <KanbanColumn id="inProgress" title="In Progress" count={inProgressTasks.length}>
                 {inProgressTasks.map(task => (
-                  <TaskCard key={task.id} task={task} />
+                  <TaskCard key={task.id} task={task}
+                  />
                 ))}
               </KanbanColumn>
               <KanbanColumn id="complete" title="Complete" count={completeTasks.length}>
                 {completeTasks.map(task => (
-                  <TaskCard key={task.id} task={task} />
+                  <TaskCard key={task.id} task={task}
+                    {...task.subTasks.map(subtask => (
+                      <div key={subtask.id}>{subtask.title}</div>
+                    ))}
+                  />
                 ))}
               </KanbanColumn>
             </motion.div>
