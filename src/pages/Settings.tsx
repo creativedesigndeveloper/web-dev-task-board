@@ -4,8 +4,10 @@ import { Sidebar } from "@/components/Sidebar"
 const Settings = () => {
   return (
     <>
-      <h1>Settings</h1>
-      <Sidebar />
+      <div className="flex bg-bg-primary min-h-screen">
+        <Sidebar />
+        <h1 className="text-text-primary">Settings</h1>
+      </div>
     </>
   )
 }

@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { updateTask } from "@/store/taskSlice"
 import { DndContext, type DragEndEvent } from "@dnd-kit/core"
 import { KanbanColumn } from "@/components/KanbanColumn"
-import PomodoroTimer from "@/components/PomodoroTimer"
 import { motion, AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 
@@ -49,7 +48,6 @@ const DashBoard = () => {
         <Sidebar />
         <DndContext onDragEnd={handleDragEnd}>
           <main className="flex-1 p-6">
-            <PomodoroTimer />
             <motion.div
               className="flex gap-6 text-text-primary"
               initial="hidden"

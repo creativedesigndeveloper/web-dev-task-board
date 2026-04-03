@@ -2,6 +2,7 @@ import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
 import { addSubTask, deleteTask, setSelectedTask, toggleSubTask, updateTask } from "@/store/taskSlice";
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const priorityColour = {
   highPriority: 'bg-priority-high',
@@ -13,6 +14,7 @@ const priorityColour = {
 export const TaskModal = () => {
   const selectedTask = useAppSelector((state) => state.task.selectedTask)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const [newSubTask, setNewSubTask] = useState('')
   const [isEditing, setIsEditing] = useState(false)
   const [editedTask, setIsEditedTask] = useState({
@@ -70,6 +72,10 @@ export const TaskModal = () => {
 
   const onClose = () => {
     dispatch(setSelectedTask(null))
+  }
+
+  const onFocus = () => {
+    navigate('/focus', { state: { taskId: selectedTask?.id } })
   }
 
 
@@ -139,6 +145,9 @@ export const TaskModal = () => {
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-text-primary font-bold text-2xl">{selectedTask.title}</h3>
                   <span className={`w-3 h-3 rounded-full ${priorityColour[selectedTask.priority]}`} />
+                </div>
+                <div>
+                  <button onClick={onFocus} className="text-xs bg-purple-dark text-text-primary px-2 py-0.5 my-1 rounded-lg">Task Focus</button>
                 </div>
                 <span className="text-xs bg-purple-accent text-white px-2 py-1 rounded-lg">{selectedTask.category}</span>
                 <button onClick={editMode} className="text-xs bg-orange-400 text-text-primary px-4 my-2 mx-2 rounded-2xl cursor-pointer">Edit</button>

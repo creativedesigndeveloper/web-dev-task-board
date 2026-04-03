@@ -4,8 +4,10 @@ import { Sidebar } from "@/components/Sidebar"
 const Templates = () => {
   return (
     <>
-      <h1>Templates</h1>
-      <Sidebar />
+      <div className="flex bg-bg-primary min-h-screen">
+        <Sidebar />
+        <h1 className="text-text-primary">Templates</h1>
+      </div>
     </>
   )
 }

@@ -1,6 +1,6 @@
 import type { Task } from "@/types/Task";
 import { setSelectedTask, toggleSubTask } from "@/store/taskSlice";
-import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useDraggable } from "@dnd-kit/core";
 import { motion } from 'framer-motion'
 
@@ -20,7 +20,6 @@ export const TaskCard = ({ task }: TaskCardProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id
   })
-  const selectedTaskId = useAppSelector((state) => state.task.selectedTask)
 
 
   const style = transform ? {
@@ -55,6 +54,7 @@ export const TaskCard = ({ task }: TaskCardProps) => {
           <div key={subtask.id} className="flex items-center gap-2 mt-1">
             <input
               type="checkbox"
+              className=" border-purple-accent"
               checked={subtask.isCompleted}
               onChange={() => dispatch(toggleSubTask({
                 taskId: task.id,

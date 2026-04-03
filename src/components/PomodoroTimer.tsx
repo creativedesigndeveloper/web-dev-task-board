@@ -33,18 +33,28 @@ const PomodoroTimer = () => {
 
   }, [isRunning])
 
+  const skipClock = () => {
+    setIsBreak(current => {
+      const switchingToBreak = !current
 
-  const resetPomodoroTimer = () => {
-    setTimeLeft(25 * 60)
-    setIsRunning(false)
+      setTimeLeft(switchingToBreak ? 5 * 60 : 25 * 60)
+      return switchingToBreak
+    })
+
   }
+
+
+
 
   return (
     <>
-      <h3 className="text-text-primary">{isBreak ? 'Break Time!' : 'Focus Time!'}</h3>
-      <span className="text-text-primary">{display}</span>
-      <button type='button' className={`${isRunning ? 'text-text-primary bg-red-500' : 'text-black bg-green-300'} ml-4 p-5 pt-0 pb-0 rounded-2xl`} onClick={() => setIsRunning(prev => !prev)}>{isRunning ? 'Pause' : 'Start'}</button>
-      <button type="button" className="text-text-primary bg-red-500 ml-4 p-5 pt-0 pb-0 rounded-2xl" onClick={resetPomodoroTimer}>Reset</button>
+      <div>
+        <span className={`text-text-primary ${isRunning ? 'bg-purple-accent' : 'bg-bg-secondary'} py-1 px-15 rounded-2xl`}
+          onClick={() => { setIsRunning((prev) => !prev) }
+
+          }>{display}</span>
+        <span className="text-text-primary bg-purple-accent mx-5 px-12 py-2 text-2xl rounded-2xl" onClick={skipClock}>Skip</span>
+      </div>
     </>
   )
 }
