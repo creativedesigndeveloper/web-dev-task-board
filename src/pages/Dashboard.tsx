@@ -7,6 +7,8 @@ import { DndContext, type DragEndEvent } from "@dnd-kit/core"
 import { KanbanColumn } from "@/components/KanbanColumn"
 import { motion, AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
+import { subscribeToTasks, updateTaskToFirestore } from "@/api/taskApi"
+import { setTasks } from "@/store/taskSlice"
 
 const DashBoard = () => {
   const todoTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'todo'))
@@ -14,6 +16,7 @@ const DashBoard = () => {
   const completeTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'complete'))
 
   const tasks = useAppSelector((state) => state.task.tasks)
+  const userId = useAppSelector((state) => state.auth.user?.id)
 
   const dispatch = useAppDispatch()
 
@@ -32,12 +35,17 @@ const DashBoard = () => {
 
     if (task) {
       dispatch(updateTask({ ...task, status: newStatus }))
+      updateTaskToFirestore({ ...task, status: newStatus })
     }
   }
 
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks))
-  }, [tasks])
+    if (!userId) return
+    const unsubscribe = subscribeToTasks(userId, (tasks) => {
+      dispatch(setTasks(tasks))
+    })
+    return unsubscribe
+  }, [tasks, userId, dispatch])
 
 
 

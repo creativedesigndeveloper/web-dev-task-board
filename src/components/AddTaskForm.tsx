@@ -1,3 +1,4 @@
+import { addTaskToFirestore } from "@/api/taskApi"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { addTask } from "@/store/taskSlice"
 import { useEffect, useState } from "react"
@@ -12,6 +13,7 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
   const [status, setStatus] = useState<'todo' | 'inProgress' | 'complete'>('todo')
   const [priority, setPriority] = useState<'highPriority' | 'midPriority' | 'lowPriority'>('lowPriority')
   const tasks = useAppSelector(state => state.task.tasks)
+  const userId = useAppSelector((state) => state.auth.user?.id)
 
 
   const dispatch = useAppDispatch()
@@ -19,6 +21,7 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const id = crypto.randomUUID()
+    if (!userId) return
     dispatch(addTask({
       title: text,
       id: id,
@@ -26,17 +29,22 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
       status: status,
       category: category,
       subTasks: []
-    }))
+    }),
+    )
+    addTaskToFirestore({
+      title: text,
+      id: id,
+      priority: priority,
+      status: status,
+      category: category,
+      subTasks: []
+    }, userId)
     onClose()
     setText('')
     setCategory('')
     setStatus('todo')
     setPriority('lowPriority')
   }
-
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks))
-  }, [tasks])
 
 
 

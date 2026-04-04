@@ -1,14 +1,8 @@
 import type { SubTask, Task, TaskState } from "@/types/Task"
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
-
-const loadTasks = () => {
-  const saved = localStorage.getItem('tasks')
-  return saved ? JSON.parse(saved) : []
-}
-
 const initialState: TaskState = {
-  tasks: loadTasks(),
+  tasks: [],
   selectedTask: null
 }
 
@@ -29,6 +23,10 @@ export const taskSlice = createSlice({
         state.tasks[index] = action.payload
       }
     },
+    setTasks: (state, action: PayloadAction<Task[]>) => {
+      state.tasks = action.payload
+    },
+
     toggleSubTask: (state, action: PayloadAction<{taskId: string, subTaskId: string}>) => {
       const parentId = state.tasks.findIndex(task => task.id === action.payload.taskId)
       const subId = state.tasks[parentId].subTasks.findIndex(task => task.id === action.payload.subTaskId)
@@ -49,6 +47,6 @@ export const taskSlice = createSlice({
   }
 })
 
-export const {addTask, deleteTask, updateTask, toggleSubTask, setSelectedTask, addSubTask} = taskSlice.actions
+export const {addTask, deleteTask, updateTask, toggleSubTask, setSelectedTask, addSubTask, setTasks} = taskSlice.actions
 export default taskSlice.reducer
 

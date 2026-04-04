@@ -1,3 +1,4 @@
+import { addSubTaskToFirestore, addTaskToFirestore, deleteTaskToFirestore, updateTaskToFirestore } from "@/api/taskApi";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
 import { addSubTask, deleteTask, setSelectedTask, toggleSubTask, updateTask } from "@/store/taskSlice";
 import { motion, AnimatePresence } from 'framer-motion'
@@ -24,6 +25,7 @@ export const TaskModal = () => {
     priority: selectedTask?.priority,
     subTasks: selectedTask?.subTasks
   })
+  const userId = useAppSelector((state) => state.auth.user?.id)
 
   const onAddSubTask = () => {
     if (!newSubTask.trim()) return
@@ -37,6 +39,12 @@ export const TaskModal = () => {
         isCompleted: false
       }
     }))
+    addSubTaskToFirestore(
+      selectedTask, {
+      id: crypto.randomUUID(),
+      title: newSubTask,
+      isCompleted: false,
+    })
     setNewSubTask('')
   }
 
@@ -57,6 +65,10 @@ export const TaskModal = () => {
       ...selectedTask,
       ...editedTask
     }))
+    updateTaskToFirestore({
+      ...selectedTask,
+      ...editedTask
+    })
     setIsEditing(false)
   }
 
@@ -68,6 +80,7 @@ export const TaskModal = () => {
     if (!selectedTask) return null
     dispatch(deleteTask(selectedTask.id))
     dispatch(setSelectedTask(null))
+    deleteTaskToFirestore(selectedTask)
   };
 
   const onClose = () => {
