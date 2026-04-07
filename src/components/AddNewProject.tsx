@@ -1,17 +1,50 @@
 import { useState } from "react"
+import { addProjectToFirestore } from "@/api/projectApi"
+import { addProject } from "@/store/projectsSlice"
+import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch"
+
+interface AddNewProjectProps {
+  onClose: () => void
+}
 
 
-const AddNewProject = () => {
+const AddNewProject = ({ onClose }: AddNewProjectProps) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [status, setStatus] = useState<'active' | 'archived'>('active')
   const [dueDate, setDueDate] = useState('')
   const [newMembers, setNewMembers] = useState('')
+  const userId = useAppSelector((state) => state.auth.user?.id)
+  const dispatch = useAppDispatch()
 
 
 
-  const submitProject = () => {
-
+  const submitProject = (e: React.FormEvent) => {
+    e.preventDefault()
+    const id = crypto.randomUUID()
+    if (!userId) return
+    dispatch(addProject({
+      title: title,
+      id: id,
+      description: description,
+      status: status,
+      dueDate: dueDate,
+      members: []
+    }))
+    addProjectToFirestore({
+      title: title,
+      id: id,
+      description: description,
+      status: status,
+      dueDate: dueDate,
+      members: []
+    }, userId)
+    onClose()
+    setTitle('')
+    setDescription('')
+    setDueDate('')
+    setStatus('active')
+    setNewMembers('')
   }
 
   return (
@@ -53,7 +86,10 @@ const AddNewProject = () => {
                 onChange={(e) => setNewMembers(e.target.value)} className="text-white bg-bg-primary border-2 border-purple-accent px-3 py-1 rounded-2xl" />
             </div>
             <div>
-              <button className="text-text-primary bg-purple-accent text-center px-4 py-2 mt-6 rounded-full">Add New Project</button>
+              <button type="submit" className="text-text-primary bg-purple-accent text-center px-4 py-2 mt-6 rounded-full" >Add New Project</button>
+            </div>
+            <div>
+              <button className="bg-red-500 p-3 pt-0 pb-0 mt-7 rounded-full text-text-primary" type="button" onClick={onClose}>Cancel</button>
             </div>
           </form>
 

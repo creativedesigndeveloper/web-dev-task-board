@@ -2,7 +2,7 @@ import type { SubTask, Task, TaskState } from "@/types/Task"
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
 const initialState: TaskState = {
-  tasks: [],
+  tasks: [] as Task[],
   selectedTask: null
 }
 

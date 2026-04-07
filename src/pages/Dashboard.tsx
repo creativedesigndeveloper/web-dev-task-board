@@ -9,6 +9,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
 import { subscribeToTasks, updateTaskToFirestore } from "@/api/taskApi"
 import { setTasks } from "@/store/taskSlice"
+import { subscribeToProjects } from "@/api/projectApi"
+import { setProject } from "@/store/projectsSlice"
 
 const DashBoard = () => {
   const todoTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'todo'))
@@ -16,6 +18,7 @@ const DashBoard = () => {
   const completeTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'complete'))
 
   const tasks = useAppSelector((state) => state.task.tasks)
+  const projects = useAppSelector((state) => state.projects.projects)
   const userId = useAppSelector((state) => state.auth.user?.id)
 
   const dispatch = useAppDispatch()
@@ -41,11 +44,20 @@ const DashBoard = () => {
 
   useEffect(() => {
     if (!userId) return
-    const unsubscribe = subscribeToTasks(userId, (tasks) => {
+    const unsubscribeTasks = subscribeToTasks(userId, (tasks) => {
       dispatch(setTasks(tasks))
+      return unsubscribeTasks
     })
-    return unsubscribe
+
   }, [tasks, userId, dispatch])
+  useEffect(() => {
+    if (!userId) return
+    const unsubscribeProjects = subscribeToProjects(userId, (projects) => {
+      dispatch(setProject(projects))
+    })
+    return unsubscribeProjects
+
+  }, [projects, userId, dispatch])
 
 
 

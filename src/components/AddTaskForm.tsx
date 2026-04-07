@@ -1,7 +1,7 @@
 import { addTaskToFirestore } from "@/api/taskApi"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { addTask } from "@/store/taskSlice"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 interface AddTaskFormProps {
   onClose: () => void
@@ -12,7 +12,6 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
   const [category, setCategory] = useState('')
   const [status, setStatus] = useState<'todo' | 'inProgress' | 'complete'>('todo')
   const [priority, setPriority] = useState<'highPriority' | 'midPriority' | 'lowPriority'>('lowPriority')
-  const tasks = useAppSelector(state => state.task.tasks)
   const userId = useAppSelector((state) => state.auth.user?.id)
 
 

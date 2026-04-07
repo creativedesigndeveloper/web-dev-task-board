@@ -4,11 +4,13 @@ import { AddTaskForm } from "./AddTaskForm"
 import { logoutUser } from "@/api/authApi"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { logout } from "@/store/authSlice"
+import AddNewProject from "./AddNewProject"
 
 
 
 export const Sidebar = () => {
   const [showAddTask, setShowAddTask] = useState(false)
+  const [showAddProject, setShowAddProject] = useState(false)
 
 
   const navigate = useNavigate()
@@ -43,12 +45,16 @@ export const Sidebar = () => {
             <h4 onClick={() => navigate('/settings')}>Settings</h4>
           </div>
         </div>
-        <button className="text-text-primary bg-purple-accent rounded-full px-4 py-2 m-1 pointer-coarse" onClick={() => setShowAddTask(true)}>+ New Task</button>
+        <div>
+          <button className="text-text-primary bg-purple-accent rounded-full px-4 py-2 m-1 pointer-coarse" onClick={() => setShowAddTask(true)}>+ New Task</button>
+        </div>
+        <button className="text-text-primary bg-purple-light rounded-2xl px-4 py-2 m-1 pointer-coarse" onClick={() => setShowAddProject(true)}>+ New Project</button>
         <div>
           <button className="text-text-primary bg-purple-dark rounded-full p-4 py-0 mt-5 ml-3 cursor-pointer" onClick={signOut}>Logout</button>
         </div>
 
         {showAddTask && <AddTaskForm onClose={() => setShowAddTask(false)} />}
+        {showAddProject && <AddNewProject onClose={() => setShowAddProject(false)} />}
       </div>
     </>
   )

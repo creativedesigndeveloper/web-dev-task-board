@@ -2,7 +2,7 @@ import type { ProjectState, Project } from "@/types/projects";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: ProjectState = {
-  projects: [],
+  projects: [] as Project[],
   selectedProject: null
 }
 
@@ -13,6 +13,11 @@ export const projectSlice = createSlice({
     addProject: (state, action: PayloadAction<Project>) => {
       state.projects.push(action.payload)
     },
+
+    setProject: (state, action: PayloadAction<Project[]>) => {
+      state.projects = action.payload
+    },
+
     deleteProject: (state, action: PayloadAction<string>) => {
       state.projects = state.projects.filter((project) => project.id !== action.payload)
     },
@@ -26,5 +31,5 @@ export const projectSlice = createSlice({
   }
 })
 
-export const {addProject, deleteProject, updateProject} = projectSlice.actions
+export const {addProject, deleteProject, updateProject, setProject} = projectSlice.actions
 export default projectSlice.reducer

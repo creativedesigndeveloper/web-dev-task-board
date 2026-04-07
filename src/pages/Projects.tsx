@@ -1,15 +1,25 @@
-import AddNewProject from "@/components/AddNewProject"
+import { ProjectCard } from "@/components/ProjectCard"
 import { Sidebar } from "@/components/Sidebar"
+import { useAppSelector } from "@/hooks/useAppDispatch"
 
 
 const Projects = () => {
+  const projects = useAppSelector((state) => state.projects.projects)
+
   return (
     <>
       <div className="flex bg-bg-primary min-h-screen">
         <Sidebar />
-        <div>
-          <button className="text-text-primary bg-purple-accent px-5 py-2 rounded-2xl m-3">Create Project +</button>
-          <AddNewProject />
+        <div className="m-10">
+          {projects.map(project => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+          <div>
+
+          </div>
+          <div>
+
+          </div>
         </div>
       </div>
     </>
