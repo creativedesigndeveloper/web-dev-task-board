@@ -7,6 +7,6 @@ export interface Project {
 }
 
 export interface ProjectState {
-  projects: Project
+  projects: Project[]
   selectedProject: string | null
 }

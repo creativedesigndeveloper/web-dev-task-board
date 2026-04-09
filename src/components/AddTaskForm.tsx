@@ -12,6 +12,8 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
   const [category, setCategory] = useState('')
   const [status, setStatus] = useState<'todo' | 'inProgress' | 'complete'>('todo')
   const [priority, setPriority] = useState<'highPriority' | 'midPriority' | 'lowPriority'>('lowPriority')
+  const projects = useAppSelector((state) => state.projects.projects)
+  const [projectId, setProjectId] = useState('')
   const userId = useAppSelector((state) => state.auth.user?.id)
 
 
@@ -24,6 +26,7 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
     dispatch(addTask({
       title: text,
       id: id,
+      projectId: projectId,
       priority: priority,
       status: status,
       category: category,
@@ -33,6 +36,7 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
     addTaskToFirestore({
       title: text,
       id: id,
+      projectId: projectId,
       priority: priority,
       status: status,
       category: category,
@@ -69,6 +73,16 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
                 <option value='complete'>Complete</option>
               </select>
             </div>
+            {projects.length > 0 ?
+              <div className="mb-2">
+                <h3 className="bg-purple-accent rounded-2xl">Project</h3>
+                <select className="m-2 p-2" name="task-project" value={projectId} onChange={(e) => setProjectId((e.target as HTMLSelectElement).value as typeof projectId)}>
+                  <option value="">None</option>
+                  {projects.map(project => (
+                    <option value={project.id} key={project.id}>{project.title}</option>
+                  ))}
+                </select>
+              </div> : ''}
             <div className="mb-2">
               <h3 className=" bg-purple-accent rounded-2xl">Priority</h3>
               <select className="m-2 p-2" name="task-priority" value={priority} onChange={(e) => setPriority((e.target as HTMLSelectElement).value as 'lowPriority' | 'midPriority' | 'highPriority')}>

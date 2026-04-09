@@ -36,7 +36,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           <h3 className="text-text-primary font-bold mr-10 text-xl">{project.title}</h3>
           <span className={`w-3 h-3 rounded-full ${statusColor[project.status]}`} />
         </div>
-        <div className="text-text-primary bg-purple-accent px-2 py-1 mt-4 rounded-full text-xs w-16">{project.description}</div>
+        <div className="text-text-primary bg-purple-accent px-2 py-1 mt-4 rounded-full text-xs w-55">{project.description}</div>
       </div>
       <div className="ml-auto w-64">
         <div className="w-full bg-bg-secondary rounded-full h-2 border border-purple-accent">

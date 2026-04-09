@@ -10,7 +10,7 @@ import { useEffect } from "react"
 import { subscribeToTasks, updateTaskToFirestore } from "@/api/taskApi"
 import { setTasks } from "@/store/taskSlice"
 import { subscribeToProjects } from "@/api/projectApi"
-import { setProject } from "@/store/projectsSlice"
+import { setProjects } from "@/store/projectsSlice"
 
 const DashBoard = () => {
   const todoTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'todo'))
@@ -46,18 +46,19 @@ const DashBoard = () => {
     if (!userId) return
     const unsubscribeTasks = subscribeToTasks(userId, (tasks) => {
       dispatch(setTasks(tasks))
-      return unsubscribeTasks
     })
+    return unsubscribeTasks
 
-  }, [tasks, userId, dispatch])
+  }, [userId, dispatch])
+
   useEffect(() => {
     if (!userId) return
     const unsubscribeProjects = subscribeToProjects(userId, (projects) => {
-      dispatch(setProject(projects))
+      dispatch(setProjects(projects))
     })
     return unsubscribeProjects
 
-  }, [projects, userId, dispatch])
+  }, [userId, dispatch])
 
 
 

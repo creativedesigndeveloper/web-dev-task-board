@@ -3,6 +3,8 @@ import { setSelectedTask, toggleSubTask } from "@/store/taskSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useDraggable } from "@dnd-kit/core";
 import { motion } from 'framer-motion'
+import { memo } from "react";
+import { CSS } from '@dnd-kit/utilities'
 
 interface TaskCardProps {
   task: Task
@@ -17,22 +19,22 @@ const priorityColour = {
 
 
 export const TaskCard = ({ task }: TaskCardProps) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id
   })
 
 
-  const style = transform ? {
-    transform: `translate(${transform.x}px, ${transform.y}px)`
-  } : undefined
+  const style = {
+    transform: CSS.Translate.toString(transform),
+  }
 
   const dispatch = useAppDispatch()
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
+      initial={isDragging ? false : { opacity: 0, y: 20 }}
+      animate={isDragging ? false : { opacity: 1, y: 0 }}
+      exit={isDragging ? {} : { opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
     >
 
