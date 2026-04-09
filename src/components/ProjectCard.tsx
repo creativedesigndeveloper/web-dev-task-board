@@ -30,15 +30,18 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
 
     <div
-      className="border-purple-accent border rounded-xl p-6 mb-3 flex" style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}>
-      <div className="mb-2">
+      className="border-purple-accent border rounded-xl p-6 mb-3 hover:scale-[1.02] flex transition-transform" style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}>
+      <div className="mb-2 flex-1">
         <div className="flex items-center">
-          <h3 className="text-text-primary font-bold mr-10 text-xl">{project.title}</h3>
-          <span className={`w-3 h-3 rounded-full ${statusColor[project.status]}`} />
+          <span className={`w-6 h-2 rounded-full border-none ${statusColor[project.status]}`} />
+          <h3 className="text-text-primary font-bold pl-2 text-xl">{project.title}</h3>
         </div>
         <div className="text-text-primary bg-purple-accent px-2 py-1 mt-4 rounded-full text-xs w-55">{project.description}</div>
+        <div className="mt-4">
+          <span className="text-text-secondary bg-transparent px-2 py-3 text-sm">{project.dueDate}</span>
+        </div>
       </div>
-      <div className="ml-auto w-64">
+      <div className=" max-w-xs pl-6 wrap-break-word">
         <div className="w-full bg-bg-secondary rounded-full h-2 border border-purple-accent">
           <div
             className="bg-purple-accent h-2 rounded-full"
@@ -46,11 +49,10 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           />
         </div>
         <span className="text-text-primary text-xs">{completedTasks}/{totalTasks} tasks</span>
+        <div>
 
-        <div className="mt-4">
-          <span className="text-text-secondary bg-transparent px-2 py-3 text-sm">{project.dueDate}</span>
+          <button className="bg-red-500 text-white px-5 rounded-2xl mt-2" onClick={deleteProjects}>Delete</button>
         </div>
-        <button className="bg-red-500 text-white px-5 py-1 rounded-2xl mt-2" onClick={deleteProjects}>Delete</button>
 
       </div>
     </div>

@@ -3,7 +3,6 @@ import { setSelectedTask, toggleSubTask } from "@/store/taskSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useDraggable } from "@dnd-kit/core";
 import { motion } from 'framer-motion'
-import { memo } from "react";
 import { CSS } from '@dnd-kit/utilities'
 
 interface TaskCardProps {

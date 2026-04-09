@@ -15,6 +15,7 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
   const [dueDate, setDueDate] = useState('')
   const userId = useAppSelector((state) => state.auth.user?.id)
   const dispatch = useAppDispatch()
+  const date = new Date()
 
 
 
@@ -27,14 +28,16 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
       id: id,
       description: description,
       status: status,
-      dueDate: dueDate
+      dueDate: dueDate,
+      createdAt: date.toISOString()
     }))
     addProjectToFirestore({
       title: title,
       id: id,
       description: description,
       status: status,
-      dueDate: dueDate
+      dueDate: dueDate,
+      createdAt: date.toISOString()
     }, userId)
     onClose()
     setTitle('')

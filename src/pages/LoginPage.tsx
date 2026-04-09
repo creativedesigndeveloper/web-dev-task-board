@@ -3,7 +3,6 @@ import { setCredentials } from "@/store/authSlice"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { useNavigate } from "react-router-dom"
 import { signInUser } from "@/api/authApi"
-import { div } from "framer-motion/client"
 
 const LoginPage = () => {
 

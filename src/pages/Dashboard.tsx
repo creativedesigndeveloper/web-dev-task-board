@@ -16,9 +16,6 @@ const DashBoard = () => {
   const todoTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'todo'))
   const inProgressTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'inProgress'))
   const completeTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'complete'))
-
-  const tasks = useAppSelector((state) => state.task.tasks)
-  const projects = useAppSelector((state) => state.projects.projects)
   const userId = useAppSelector((state) => state.auth.user?.id)
 
   const dispatch = useAppDispatch()
