@@ -13,7 +13,6 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
   const [description, setDescription] = useState('')
   const [status, setStatus] = useState<'active' | 'archived'>('active')
   const [dueDate, setDueDate] = useState('')
-  const [newMembers, setNewMembers] = useState('')
   const userId = useAppSelector((state) => state.auth.user?.id)
   const dispatch = useAppDispatch()
 
@@ -28,23 +27,20 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
       id: id,
       description: description,
       status: status,
-      dueDate: dueDate,
-      members: []
+      dueDate: dueDate
     }))
     addProjectToFirestore({
       title: title,
       id: id,
       description: description,
       status: status,
-      dueDate: dueDate,
-      members: []
+      dueDate: dueDate
     }, userId)
     onClose()
     setTitle('')
     setDescription('')
     setDueDate('')
     setStatus('active')
-    setNewMembers('')
   }
 
   return (
@@ -76,14 +72,6 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
                 <option value="active">Active</option>
                 <option value="archived">Archived</option>
               </select>
-            </div>
-            <div>
-              <h2 className="text-text-primary font-bold my-4">Add Members</h2>
-              <input
-                type="text"
-                value={newMembers}
-                placeholder="Add new members"
-                onChange={(e) => setNewMembers(e.target.value)} className="text-white bg-bg-primary border-2 border-purple-accent px-3 py-1 rounded-2xl" />
             </div>
             <div>
               <button type="submit" className="text-text-primary bg-purple-accent text-center px-4 py-2 mt-6 rounded-full" >Add New Project</button>
