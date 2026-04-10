@@ -62,12 +62,12 @@ const DashBoard = () => {
 
   return (
     <>
-      <div className="flex min-h-screen relative z-10">
+      <div className="flex min-h-screen relative z-10 flex-col md:flex-row">
         <Sidebar />
         <DndContext onDragEnd={handleDragEnd}>
           <main className="flex-1 p-6">
             <motion.div
-              className="flex gap-6 text-text-primary"
+              className="flex gap-6 text-text-primary flex-col md:flex-row"
               initial="hidden"
               animate="visible"
               variants={{

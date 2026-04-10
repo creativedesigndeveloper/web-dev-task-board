@@ -31,7 +31,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
 
     <motion.div
-      className="border-purple-accent border rounded-xl p-6 mb-3 hover:scale-[1.02] flex transition-transform" style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}
+      className="border-purple-accent border rounded-xl p-6 mb-4 hover:scale-[1.02] flex transition-transform max-w-100 " style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}
       variants={{
         hidden: { opacity: 0, y: 10 },
         visible: { opacity: 1, y: 0 }
@@ -39,17 +39,17 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       transition={{ duration: 0.3, ease: 'easeOut' }}
 
     >
-      <div className="mb-2 flex-1">
+      <div className="mb-2 flex-1 min-w-0">
         <div className="flex items-center">
           <span className={`w-6 h-2 rounded-full border-none ${statusColor[project.status]}`} />
           <h3 className="text-text-primary font-bold pl-2 text-xl">{project.title}</h3>
         </div>
-        <div className="text-text-primary bg-purple-accent px-2 py-1 mt-4 rounded-full text-xs w-55">{project.description}</div>
+        <div className="text-text-primary bg-purple-accent px-5 py-1 mt-4 rounded-full text-xs max-w-full overflow-hidden line-clamp-2">{project.description}</div>
         <div className="mt-4">
           <span className="text-text-secondary bg-transparent px-2 py-3 text-sm">{project.dueDate}</span>
         </div>
       </div>
-      <div className=" max-w-xs pl-6 wrap-break-word">
+      <div className="min-w-fit shrink-0 pl-6 break-word">
         <div className="w-full bg-bg-secondary rounded-full h-2 border border-purple-accent">
           <div
             className="bg-purple-accent h-2 rounded-full"

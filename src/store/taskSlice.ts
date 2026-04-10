@@ -35,7 +35,7 @@ export const taskSlice = createSlice({
         state.tasks[parentId].subTasks[subId].isCompleted = !state.tasks[parentId].subTasks[subId].isCompleted
       }
     },
-    setSelectedTask: (state, action: PayloadAction<Task | null>) => {
+    setSelectedTask: (state, action: PayloadAction<string | null>) => {
       state.selectedTask = action.payload
     },
     addSubTask: (state, action: PayloadAction<{taskId: string, subTask: SubTask}>) => {

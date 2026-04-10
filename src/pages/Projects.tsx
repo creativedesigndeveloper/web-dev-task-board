@@ -9,10 +9,10 @@ const Projects = () => {
 
   return (
     <>
-      <div className="flex relative z-10">
+      <div className="flex relative z-10 min-h-screen">
         <Sidebar />
         <motion.div
-          className="m-10 grid grid-cols-2 gap-4 items-start justify-center"
+          className="mx-10 my-8 grid grid-cols-1 md:grid-cols-3 gap-4 items-start justify-center"
           initial="hidden"
           animate="visible"
           variants={{

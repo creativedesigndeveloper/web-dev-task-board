@@ -42,7 +42,7 @@ export const TaskCard = ({ task }: TaskCardProps) => {
         ref={setNodeRef}
         style={style}
         {...attributes}
-        className="bg-bg-card rounded-xl p-4 mb-3 border border-purple-accent" onClick={() => dispatch(setSelectedTask(task))}>
+        className="bg-bg-card rounded-xl p-4 mb-3 border border-purple-accent" onClick={() => dispatch(setSelectedTask(task.id))}>
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-text-primary font-bold">{task.title}</h3>
           <div className="flex items-center gap-2 ml-auto">

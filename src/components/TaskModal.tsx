@@ -13,7 +13,7 @@ const priorityColour = {
 
 
 export const TaskModal = () => {
-  const selectedTask = useAppSelector((state) => state.task.selectedTask)
+  const selectedTask = useAppSelector((state) => state.task.tasks.find(task => task.id === state.task.selectedTask))
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [newSubTask, setNewSubTask] = useState('')
@@ -29,18 +29,19 @@ export const TaskModal = () => {
   const onAddSubTask = () => {
     if (!newSubTask.trim()) return
     if (!selectedTask) return
+    const id = crypto.randomUUID()
 
     dispatch(addSubTask({
       taskId: selectedTask.id,
       subTask: {
-        id: crypto.randomUUID(),
+        id: id,
         title: newSubTask,
         isCompleted: false
       }
     }))
     addSubTaskToFirestore(
       selectedTask, {
-      id: crypto.randomUUID(),
+      id: id,
       title: newSubTask,
       isCompleted: false,
     })

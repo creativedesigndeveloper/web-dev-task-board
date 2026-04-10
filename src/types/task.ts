@@ -16,5 +16,5 @@ export interface SubTask {
 
 export interface TaskState {
   tasks: Task[]
-  selectedTask: Task | null
+  selectedTask: string | null
 }
