@@ -36,7 +36,7 @@ const LoginPage = () => {
     <div className="min-h-screen relative z-10">
       <div className=" text-text-primary max-w-180 mx-auto">
         <h1 className="font-bold text-center p-5 text-4xl">Web Dev Task Board</h1>
-        <form onSubmit={handleSubmit} className=" text-center items-center my-50 rounded-2xl px-10 py-5">
+        <form onSubmit={handleSubmit} className="bg-bg-secondary text-center items-center my-50 rounded-2xl px-10 py-5">
           <div>
             <h4 className="pb-2">Email</h4>
             <input value={email}
