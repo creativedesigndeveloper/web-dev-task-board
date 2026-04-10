@@ -1,4 +1,4 @@
-import type { SubTask, Task, TaskState } from "@/types/Task"
+import type { SubTask, Task, TaskState } from "@/types/task"
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
 const initialState: TaskState = {

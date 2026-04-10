@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 const PomodoroTimer = () => {
   const [timeLeft, setTimeLeft] = useState(25 * 60)
   const [isRunning, setIsRunning] = useState(false)
-  const [isBreak, setIsBreak] = useState(false)
+  const [_isBreak, setIsBreak] = useState(false)
 
   const minutes = Math.floor(timeLeft / 60)
   const seconds = timeLeft % 60

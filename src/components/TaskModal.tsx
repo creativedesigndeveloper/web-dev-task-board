@@ -1,4 +1,4 @@
-import { addSubTaskToFirestore, addTaskToFirestore, deleteTaskToFirestore, updateTaskToFirestore } from "@/api/taskApi";
+import { addSubTaskToFirestore, deleteTaskToFirestore, updateTaskToFirestore } from "@/api/taskApi";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
 import { addSubTask, deleteTask, setSelectedTask, toggleSubTask, updateTask } from "@/store/taskSlice";
 import { motion, AnimatePresence } from 'framer-motion'
@@ -25,7 +25,6 @@ export const TaskModal = () => {
     priority: selectedTask?.priority,
     subTasks: selectedTask?.subTasks
   })
-  const userId = useAppSelector((state) => state.auth.user?.id)
 
   const onAddSubTask = () => {
     if (!newSubTask.trim()) return
@@ -61,13 +60,22 @@ export const TaskModal = () => {
   }
 
   const onSave = () => {
+    if (!selectedTask) return
     dispatch(updateTask({
       ...selectedTask,
-      ...editedTask
+      title: editedTask.title ?? selectedTask?.title,
+      category: editedTask.category ?? selectedTask?.category,
+      status: editedTask.status ?? selectedTask?.status,
+      priority: editedTask.priority ?? selectedTask?.priority,
+      subTasks: editedTask.subTasks ?? selectedTask?.subTasks
     }))
     updateTaskToFirestore({
       ...selectedTask,
-      ...editedTask
+      title: editedTask.title ?? selectedTask?.title,
+      category: editedTask.category ?? selectedTask?.category,
+      status: editedTask.status ?? selectedTask?.status,
+      priority: editedTask.priority ?? selectedTask?.priority,
+      subTasks: editedTask.subTasks ?? selectedTask?.subTasks
     })
     setIsEditing(false)
   }

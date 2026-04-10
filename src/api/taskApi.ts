@@ -1,6 +1,6 @@
 import { collection, updateDoc, deleteDoc, doc, query, where, onSnapshot, setDoc } from "firebase/firestore"
 import { db } from "./firebaseConfig"
-import type { SubTask, Task } from "@/types/Task"
+import type { SubTask, Task } from "@/types/task"
 
 export const addTaskToFirestore = async(task: Task, userId: string) => {
   await setDoc(doc(db, 'tasks', task.id), {

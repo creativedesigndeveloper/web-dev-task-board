@@ -1,4 +1,4 @@
-import type { Task } from "@/types/Task";
+import type { Task } from "@/types/task";
 import { setSelectedTask, toggleSubTask } from "@/store/taskSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useDraggable } from "@dnd-kit/core";
