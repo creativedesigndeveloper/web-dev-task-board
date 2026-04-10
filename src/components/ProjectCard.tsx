@@ -2,6 +2,7 @@ import type { Project } from "@/types/projects"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { deleteProject } from "@/store/projectsSlice"
 import { deleteProjectToFirestore } from "@/api/projectApi"
+import { motion } from "framer-motion"
 
 
 interface ProjectCardProps {
@@ -29,8 +30,15 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
 
 
-    <div
-      className="border-purple-accent border rounded-xl p-6 mb-3 hover:scale-[1.02] flex transition-transform" style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}>
+    <motion.div
+      className="border-purple-accent border rounded-xl p-6 mb-3 hover:scale-[1.02] flex transition-transform" style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}
+      variants={{
+        hidden: { opacity: 0, y: 10 },
+        visible: { opacity: 1, y: 0 }
+      }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+
+    >
       <div className="mb-2 flex-1">
         <div className="flex items-center">
           <span className={`w-6 h-2 rounded-full border-none ${statusColor[project.status]}`} />
@@ -55,6 +63,6 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         </div>
 
       </div>
-    </div>
+    </motion.div>
   )
 }

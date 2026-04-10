@@ -11,7 +11,6 @@ import { subscribeToTasks, updateTaskToFirestore } from "@/api/taskApi"
 import { setTasks } from "@/store/taskSlice"
 import { subscribeToProjects } from "@/api/projectApi"
 import { setProjects } from "@/store/projectsSlice"
-import Starfield from "@/components/Starfield"
 
 const DashBoard = () => {
   const todoTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'todo'))
@@ -63,9 +62,8 @@ const DashBoard = () => {
 
   return (
     <>
-      <div className="flex bg-bg-primary min-h-screen">
+      <div className="flex min-h-screen relative z-10">
         <Sidebar />
-        <Starfield />
         <DndContext onDragEnd={handleDragEnd}>
           <main className="flex-1 p-6">
             <motion.div

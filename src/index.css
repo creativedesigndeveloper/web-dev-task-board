@@ -14,6 +14,10 @@
   --color-priority-low: #4dffb4;
 }
 
+body {
+  background-color: var(--color-bg-primary);
+}
+
 .card-glow {
   position: relative;
   z-index: 0;

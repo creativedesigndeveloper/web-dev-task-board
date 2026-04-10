@@ -1,4 +1,6 @@
+import Layout from "@/components/Layout";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import Starfield from "@/components/Starfield";
 import DashBoard from "@/pages/Dashboard";
 import FocusPage from "@/pages/FocusPage";
 import LoginPage from "@/pages/LoginPage";
@@ -11,36 +13,34 @@ import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <LoginPage />
-  },
-  {
-    path: '/register',
-    element: <RegisterPage />
-  },
-  {
-    element: <ProtectedRoute />,
+    element: <Layout />,
     children: [
       {
-        path: '/dashboard',
-        element: <DashBoard />
+        path: '/',
+        element: <LoginPage />
       },
       {
-        path: '/projects',
-        element: <Projects />
+        path: '/register',
+        element: <RegisterPage />
       },
       {
-        path: '/templates',
-        element: <Templates />
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: '/dashboard',
+            element: <DashBoard />
+          },
+          {
+            path: '/projects',
+            element: <Projects />
+          },
+          {
+            path: '/focus',
+            element: <FocusPage />
+          }
+        ]
       },
-      {
-        path: '/settings',
-        element: <Settings />
-      },
-      {
-        path: '/focus',
-        element: <FocusPage />
-      }
+
     ]
   },
   {
