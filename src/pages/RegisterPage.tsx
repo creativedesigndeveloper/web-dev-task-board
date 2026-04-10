@@ -37,7 +37,6 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen relative z-10">
       <div className="max-w-100 text-text-primary mx-auto">
-        <h1 className="text-center font-bold text-3xl mt-10">Register</h1>
         <form onSubmit={handleSubmit} className="text-center items-center my-50 bg-bg-secondary rounded-3xl p-10">
           <div>
             <h3 className="mb-2">Name</h3>
