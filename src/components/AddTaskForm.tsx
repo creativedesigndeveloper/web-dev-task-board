@@ -92,10 +92,10 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
               </select>
             </div>
             <div>
-              <button className="bg-purple-accent p-7 pt-0 pb-0 rounded-full mt-5" type="submit">Submit</button>
+              <button className="bg-purple-accent p-7 pt-0 pb-0 rounded-full mt-5 cursor-pointer" type="submit">Submit</button>
             </div>
             <div>
-              <button className="bg-red-500 p-3 pt-0 pb-0 mt-7 rounded-full" type="button" onClick={onClose}>Cancel</button>
+              <button className="bg-red-500 p-3 pt-0 pb-0 mt-7 rounded-full cursor-pointer" type="button" onClick={onClose}>Cancel</button>
             </div>
           </form>
         </div>

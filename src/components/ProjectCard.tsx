@@ -31,15 +31,15 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
 
     <motion.div
-      className="border-purple-accent border rounded-xl p-6 mb-4 hover:scale-[1.02] flex transition-transform max-w-100 " style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}
+      className="border-purple-accent border mb-4 rounded-xl p-6 flex max-w-80 mx-20 md:mx-0 z-50" style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}
       variants={{
-        hidden: { opacity: 0, y: 10 },
+        hidden: { opacity: 0, y: 30 },
         visible: { opacity: 1, y: 0 }
       }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      transition={{ duration: 0.3 }}
 
     >
-      <div className="mb-2 flex-1 min-w-0">
+      <div className="mb-2 min-w-0 flex-1">
         <div className="flex items-center">
           <span className={`w-6 h-2 rounded-full border-none ${statusColor[project.status]}`} />
           <h3 className="text-text-primary font-bold pl-2 text-xl">{project.title}</h3>
@@ -59,7 +59,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         <span className="text-text-primary text-xs">{completedTasks}/{totalTasks} tasks</span>
         <div>
 
-          <button className="bg-red-500 text-white px-5 rounded-2xl mt-2" onClick={deleteProjects}>Delete</button>
+          <button className="bg-red-500 text-white px-5 rounded-2xl mt-2 cursor-pointer" onClick={deleteProjects}>Delete</button>
         </div>
 
       </div>

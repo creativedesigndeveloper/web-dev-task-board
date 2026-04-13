@@ -61,7 +61,7 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
               </div>
               <div>
                 <h2 className="text-white font-bold">Description</h2>
-                <input type="text" value={description} placeholder="Enter description" className="bg-bg-primary border-2 border-purple-accent text-white px-3 py-1 my-2 rounded-2xl" onChange={(e) => setDescription(e.target.value)} />
+                <textarea value={description} placeholder="Enter description" className="bg-bg-primary border-2 border-purple-accent text-white px-3 py-1 my-2 rounded-2xl" onChange={(e) => setDescription(e.target.value)} />
               </div>
               <div>
                 <h2 className="text-white font-bold">Due Date</h2>
@@ -77,10 +77,10 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
               </select>
             </div>
             <div>
-              <button type="submit" className="text-text-primary bg-purple-accent text-center px-4 py-2 mt-6 rounded-full" >Add New Project</button>
+              <button type="submit" className="text-text-primary bg-purple-accent text-center px-4 py-2 mt-6 rounded-full cursor-pointer" >Add New Project</button>
             </div>
             <div>
-              <button className="bg-red-500 p-3 pt-0 pb-0 mt-7 rounded-full text-text-primary" type="button" onClick={onClose}>Cancel</button>
+              <button className="bg-red-500 p-3 pt-0 pb-0 mt-7 rounded-full text-text-primary cursor-pointer" type="button" onClick={onClose}>Cancel</button>
             </div>
           </form>
 

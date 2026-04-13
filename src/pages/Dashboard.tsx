@@ -1,9 +1,9 @@
-import { Sidebar } from "@/components/Sidebar"
+import { AppLayout } from '@/components/AppLayout'
 import { TaskCard } from "@/components/TaskCard"
 import { TaskModal } from "@/components/TaskModal"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { updateTask } from "@/store/taskSlice"
-import { DndContext, type DragEndEvent } from "@dnd-kit/core"
+import { DndContext, type DragEndEvent, PointerSensor, useSensor, useSensors, TouchSensor } from "@dnd-kit/core"
 import { KanbanColumn } from "@/components/KanbanColumn"
 import { motion, AnimatePresence } from "framer-motion"
 import { useEffect } from "react"
@@ -57,17 +57,21 @@ const DashBoard = () => {
 
   }, [userId, dispatch])
 
+  const onSensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
+  )
+
 
 
 
   return (
     <>
-      <div className="flex min-h-screen relative z-10 flex-col md:flex-row">
-        <Sidebar />
-        <DndContext onDragEnd={handleDragEnd}>
+      <AppLayout>
+        <DndContext sensors={onSensors} onDragEnd={handleDragEnd} >
           <main className="flex-1 p-6">
             <motion.div
-              className="flex gap-6 text-text-primary flex-col md:flex-row"
+              className="flex gap-6 text-text-primary flex-col mx-15 md:flex-row"
               initial="hidden"
               animate="visible"
               variants={{
@@ -106,7 +110,7 @@ const DashBoard = () => {
             </motion.div>
           </main>
         </DndContext>
-      </div>
+      </AppLayout>
       <AnimatePresence>
         <TaskModal />
       </AnimatePresence>

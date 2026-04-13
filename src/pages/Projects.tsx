@@ -1,5 +1,5 @@
 import { ProjectCard } from "@/components/ProjectCard"
-import { Sidebar } from "@/components/Sidebar"
+import { AppLayout } from '@/components/AppLayout'
 import { useAppSelector } from "@/hooks/useAppDispatch"
 import { motion } from "framer-motion"
 
@@ -9,10 +9,9 @@ const Projects = () => {
 
   return (
     <>
-      <div className="flex relative z-10 min-h-screen">
-        <Sidebar />
+      <AppLayout>
         <motion.div
-          className="mx-10 my-8 grid grid-cols-1 md:grid-cols-3 gap-4 items-start justify-center"
+          className=" mx-10 my-8 grid grid-cols-1 auto-rows-auto md:grid-cols-3 items-start w-full z-50"
           initial="hidden"
           animate="visible"
           variants={{
@@ -27,7 +26,7 @@ const Projects = () => {
             <ProjectCard key={project.id} project={project} />
           )) : <h3 className="text-text-primary bg-bg-secondary flex items-center text-center text-xl p-3 rounded-full">No Projects</h3>}
         </motion.div>
-      </div>
+      </AppLayout>
     </>
   )
 }

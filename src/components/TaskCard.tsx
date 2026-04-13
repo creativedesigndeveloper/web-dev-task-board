@@ -46,23 +46,23 @@ export const TaskCard = ({ task }: TaskCardProps) => {
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-text-primary font-bold">{task.title}</h3>
           <div className="flex items-center gap-2 ml-auto">
-            <span {...listeners} className="cursor-grab text-text-secondary px-1">⠿</span>
+            <span {...listeners} className="cursor-grab text-text-secondary px-1 touch-none">⠿</span>
             <span className={`w-3 h-3 rounded-full ${priorityColour[task.priority]}`} />
           </div>
         </div>
         <span className="text-xs bg-purple-accent text-white px-2 py-1 rounded-lg">{task.category}</span>
         {task.subTasks.map(subtask => (
-          <div key={subtask.id} className="flex items-center gap-2 mt-1">
+          <div key={subtask.id} className="flex-1 items-center gap-2 mt-1 border-b-2 border-white/40 last:border-b-0">
             <input
               type="checkbox"
-              className=" border-purple-accent"
+              className=" border-purple-accent my-2"
               checked={subtask.isCompleted}
               onChange={() => dispatch(toggleSubTask({
                 taskId: task.id,
                 subTaskId: subtask.id
               }))}
             />
-            <span className="text-text-primary">{subtask.title}</span>
+            <span className="text-text-primary ml-2 ">{subtask.title}</span>
           </div>
         ))}
 
