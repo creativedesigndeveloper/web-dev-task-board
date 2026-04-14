@@ -3,14 +3,15 @@ import { TaskCard } from "@/components/TaskCard"
 import { TaskModal } from "@/components/TaskModal"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { updateTask } from "@/store/taskSlice"
-import { DndContext, type DragEndEvent, PointerSensor, useSensor, useSensors, TouchSensor } from "@dnd-kit/core"
+import { DndContext, type DragEndEvent, PointerSensor, useSensor, useSensors, TouchSensor, type DragStartEvent, DragOverlay } from "@dnd-kit/core"
 import { KanbanColumn } from "@/components/KanbanColumn"
 import { motion, AnimatePresence } from "framer-motion"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { subscribeToTasks, updateTaskToFirestore } from "@/api/taskApi"
 import { setTasks } from "@/store/taskSlice"
 import { subscribeToProjects } from "@/api/projectApi"
 import { setProjects } from "@/store/projectsSlice"
+import type { Task } from '@/types/task'
 
 const DashBoard = () => {
   const tasks = useAppSelector((state) => state.task.tasks)
@@ -18,8 +19,17 @@ const DashBoard = () => {
   const inProgressTasks = useMemo(() => tasks.filter(task => task.status === 'inProgress'), [tasks])
   const completeTasks = useMemo(() => tasks.filter(task => task.status === 'complete'), [tasks])
   const userId = useAppSelector((state) => state.auth.user?.id)
+  const [activeTask, setActiveTask] = useState<Task | null>(null)
 
   const dispatch = useAppDispatch()
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
+  )
+  const handleDragStart = (e: DragStartEvent) => {
+    const task = [...todoTasks, ...inProgressTasks, ...completeTasks].find(t => t.id === e.active.id)
+    setActiveTask(task ?? null)
+  }
 
   const handleDragEnd = (e: DragEndEvent) => {
     const { active, over } = e
@@ -58,10 +68,6 @@ const DashBoard = () => {
 
   }, [userId, dispatch])
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
-  )
 
 
 
@@ -69,7 +75,7 @@ const DashBoard = () => {
   return (
     <>
       <AppLayout>
-        <DndContext sensors={sensors} onDragEnd={handleDragEnd} >
+        <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           <main className="flex-1 p-6">
             <motion.div
               className="flex gap-6 text-text-primary flex-col mx-15 md:flex-row"
@@ -108,6 +114,10 @@ const DashBoard = () => {
                   />
                 ))}
               </KanbanColumn>
+
+              <DragOverlay>
+                {activeTask ? <TaskCard task={activeTask} /> : null}
+              </DragOverlay>
             </motion.div>
           </main>
         </DndContext>

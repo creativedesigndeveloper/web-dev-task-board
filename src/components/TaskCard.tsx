@@ -18,7 +18,7 @@ const priorityColour = {
 
 
 export const TaskCard = ({ task }: TaskCardProps) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.id
   })
 
@@ -31,9 +31,9 @@ export const TaskCard = ({ task }: TaskCardProps) => {
 
   return (
     <motion.div
-      initial={isDragging ? false : { opacity: 0, y: 20 }}
-      animate={isDragging ? false : { opacity: 1, y: 0 }}
-      exit={isDragging ? {} : { opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
     >
 
