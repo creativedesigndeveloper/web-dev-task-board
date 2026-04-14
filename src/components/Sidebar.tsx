@@ -5,6 +5,7 @@ import { logoutUser } from "@/api/authApi"
 import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { logout } from "@/store/authSlice"
 import AddNewProject from "./AddNewProject"
+import { createPortal } from "react-dom"
 
 interface SidebarProps {
   isOpen: boolean
@@ -60,8 +61,8 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           </div>
         </div>
 
-        {showAddTask && <AddTaskForm onClose={() => setShowAddTask(false)} />}
-        {showAddProject && <AddNewProject onClose={() => setShowAddProject(false)} />}
+        {showAddTask && createPortal(<AddTaskForm onClose={() => setShowAddTask(false)} />, document.body)}
+        {showAddProject && createPortal(<AddNewProject onClose={() => setShowAddProject(false)} />, document.body)}
       </div>
     </>
   )

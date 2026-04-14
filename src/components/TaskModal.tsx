@@ -2,7 +2,7 @@ import { addSubTaskToFirestore, deleteTaskToFirestore, updateTaskToFirestore } f
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
 import { addSubTask, deleteTask, setSelectedTask, toggleSubTask, updateTask } from "@/store/taskSlice";
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 const priorityColour = {
@@ -18,6 +18,8 @@ export const TaskModal = () => {
   const navigate = useNavigate()
   const [newSubTask, setNewSubTask] = useState('')
   const [isEditing, setIsEditing] = useState(false)
+  const [editingSubTaskId, setEditingSubTaskId] = useState<string | null>(null)
+  const [editingSubTaskValue, setEditingSubTaskValue] = useState('')
   const [editedTask, setIsEditedTask] = useState({
     title: selectedTask?.title,
     category: selectedTask?.category,
@@ -58,6 +60,23 @@ export const TaskModal = () => {
     })
     setIsEditing(true)
     return
+  }
+
+  const editSubTask = () => {
+    if (!selectedTask) return
+    const updatedSubTasks = selectedTask.subTasks.map(st => (
+      st.id === editingSubTaskId ? { ...st, title: editingSubTaskValue } : st
+    ))
+
+    dispatch(updateTask({
+      ...selectedTask,
+      subTasks: updatedSubTasks
+    }))
+    updateTaskToFirestore({
+      ...selectedTask,
+      subTasks: updatedSubTasks
+    })
+    setEditingSubTaskId(null)
   }
 
   const onSave = () => {
@@ -192,16 +211,22 @@ export const TaskModal = () => {
                 </div>
                 {selectedTask?.subTasks.map((subtask) => (
 
-                  <div key={selectedTask.id} className="flex-1 items-center gap-2 border-b-2 border-white/40 last:border-b-0">
-                    <input
-                      type="checkbox"
-                      checked={subtask.isCompleted}
-                      onChange={() => dispatch(toggleSubTask({
-                        taskId: selectedTask.id,
-                        subTaskId: subtask.id
-                      }))}
-                    />
-                    <span className="text-text-primary ml-2">{subtask.title}</span>
+                  <div key={subtask.id} className="flex items-center justify-between gap-2 my-2 border-b-2 border-white/40 last:border-b-0">
+                    <div>
+                      <input
+                        type="checkbox"
+                        checked={subtask.isCompleted}
+                        onChange={() => dispatch(toggleSubTask({
+                          taskId: selectedTask.id,
+                          subTaskId: subtask.id
+                        }))}
+                      />
+                      {subtask.id === editingSubTaskId ? <input className="text-text-primary ml-2" value={editingSubTaskValue} onChange={(e) => setEditingSubTaskValue(e.target.value)}></input> : <span className="text-text-primary ml-2">{subtask.title}</span>}
+                    </div>
+                    {subtask.id === editingSubTaskId ? <button onClick={() => editSubTask()} className="flex ml-2 px-4 text-text-primary bg-green-400 rounded-xl text-xs cursor-pointer">Update</button> : <button onClick={() => {
+                      setEditingSubTaskId(subtask.id)
+                      setEditingSubTaskValue(subtask.title)
+                    }} className="flex ml-2 px-4 text-text-primary bg-gray-700 rounded-xl text-xs cursor-pointer">Edit</button>}
                   </div>
 
                 ))}

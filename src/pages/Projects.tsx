@@ -11,7 +11,7 @@ const Projects = () => {
     <>
       <AppLayout>
         <motion.div
-          className=" mx-10 my-8 grid grid-cols-1 auto-rows-auto md:grid-cols-3 items-start w-full z-50"
+          className=" mx-10 my-8 flex flex-col lg:grid lg:grid-cols-3  items-start w-full z-50"
           initial="hidden"
           animate="visible"
           variants={{

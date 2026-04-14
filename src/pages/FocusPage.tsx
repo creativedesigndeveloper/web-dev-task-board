@@ -3,6 +3,7 @@ import PomodoroTimer from "@/components/PomodoroTimer"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { toggleSubTask } from "@/store/taskSlice"
 import { useLocation } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 
 const FocusPage = () => {
@@ -10,6 +11,7 @@ const FocusPage = () => {
   const dispatch = useAppDispatch()
   const location = useLocation()
   const taskId = location.state?.taskId
+  const navigate = useNavigate()
 
 
 
@@ -17,14 +19,22 @@ const FocusPage = () => {
   const nextTask = tasks.find(task => task.status === focusTask?.status && task.id !== taskId)
   return (
     <>
-      <div className="flex bg-bg-primary min-h-screen">
+      <div className="flex  bg-bg-primary min-h-screen">
         <div className=" flex-1 text-center justify-center max-w-screen mx-auto px-4 py-10">
-          <div className="relative">
-            <div className="absolute left-0 w-screen border border-purple-200 opacity-40  mt-3" />
-            <span className="text-text-primary text-3xl capitalize relative bottom-1.5 bg-bg-primary px-5">Today's Focus</span>
-            <div className="bg-bg-secondary p-10 my-5 rounded-2xl mx-auto max-w-120 card-glow">
-              <h2 className="text-text-primary bg-bg-secondary py-3  rounded-md text-2xl border-2 card-glow border-purple-500 shadow-[0_10px_8px_2px_rgba(0,0,0,0.8)]">{focusTask?.title}</h2>
+          <div className="relative flex items-center justify-center mt-3">
+            <div className="absolute left-0 w-screen border border-purple-200 opacity-40" />
+            <div className="flex-1">
+              <span className="text-purple-500 font-bold text-3xl capitalize relative left-0 px-5 mr-100 bg-bg-primary cursor-pointer" onClick={() => navigate('/dashboard')}> ← </span>
             </div>
+
+            <div className="flex-1 flex justify-center">
+              <span className="text-text-primary text-3xl capitalize relative bg-bg-primary px-5">Today's Focus</span>
+            </div>
+
+            <div className="flex-1" />
+          </div>
+          <div className="bg-bg-secondary p-10 my-5 rounded-2xl mx-auto max-w-120 card-glow">
+            <h2 className="text-text-primary bg-bg-secondary py-3  rounded-md text-2xl border-2 card-glow border-purple-500 shadow-[0_10px_8px_2px_rgba(0,0,0,0.8)]">{focusTask?.title}</h2>
           </div>
           <div className="text-left relative">
             <div className="w-screen border border-purple-200 opacity-40 absolute  mt-3" />

@@ -53,7 +53,7 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-80">
         <div className="bg-bg-card rounded-xl p-6 w-96 text-text-primary text-center">
           <h1 className="text-3xl m-3 mt-0 text-bold bg-purple-dark/30 rounded-2xl p-2">Task Form</h1>
           <form onSubmit={onSubmit}>

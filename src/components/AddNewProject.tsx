@@ -48,13 +48,13 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/50 text-center items-center flex justify-center z-50 ">
-        <div className="bg-bg-card rounded-xl p-6 w-180">
+      <div className="fixed inset-0 bg-black/50 text-center items-center flex justify-center z-80 ">
+        <div className="bg-bg-card rounded-xl w-80 py-6 md:w-180">
           <div>
             <h1 className="text-purple-600 capitalize font-bold mb-3 text-2xl justify-center">New Project Info</h1>
           </div>
           <form onSubmit={submitProject}>
-            <div className="flex items-center justify-center gap-6">
+            <div className="flex items-center justify-center gap-6 flex-col md:flex-row">
               <div>
                 <h2 className="text-white font-bold">Title</h2>
                 <input type="text" value={title} placeholder="Enter Project Name" className="bg-bg-primary border-2 border-purple-accent text-white px-3 py-1 my-2 rounded-2xl" onChange={(e) => setTitle(e.target.value)} />

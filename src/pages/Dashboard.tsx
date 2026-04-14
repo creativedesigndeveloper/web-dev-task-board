@@ -6,16 +6,17 @@ import { updateTask } from "@/store/taskSlice"
 import { DndContext, type DragEndEvent, PointerSensor, useSensor, useSensors, TouchSensor } from "@dnd-kit/core"
 import { KanbanColumn } from "@/components/KanbanColumn"
 import { motion, AnimatePresence } from "framer-motion"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { subscribeToTasks, updateTaskToFirestore } from "@/api/taskApi"
 import { setTasks } from "@/store/taskSlice"
 import { subscribeToProjects } from "@/api/projectApi"
 import { setProjects } from "@/store/projectsSlice"
 
 const DashBoard = () => {
-  const todoTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'todo'))
-  const inProgressTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'inProgress'))
-  const completeTasks = useAppSelector((state) => state.task.tasks.filter(task => task.status === 'complete'))
+  const tasks = useAppSelector((state) => state.task.tasks)
+  const todoTasks = useMemo(() => tasks.filter(task => task.status === 'todo'), [tasks])
+  const inProgressTasks = useMemo(() => tasks.filter(task => task.status === 'inProgress'), [tasks])
+  const completeTasks = useMemo(() => tasks.filter(task => task.status === 'complete'), [tasks])
   const userId = useAppSelector((state) => state.auth.user?.id)
 
   const dispatch = useAppDispatch()
@@ -57,7 +58,7 @@ const DashBoard = () => {
 
   }, [userId, dispatch])
 
-  const onSensors = useSensors(
+  const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
   )
@@ -68,7 +69,7 @@ const DashBoard = () => {
   return (
     <>
       <AppLayout>
-        <DndContext sensors={onSensors} onDragEnd={handleDragEnd} >
+        <DndContext sensors={sensors} onDragEnd={handleDragEnd} >
           <main className="flex-1 p-6">
             <motion.div
               className="flex gap-6 text-text-primary flex-col mx-15 md:flex-row"

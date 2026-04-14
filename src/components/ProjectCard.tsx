@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { deleteProject } from "@/store/projectsSlice"
 import { deleteProjectToFirestore } from "@/api/projectApi"
 import { motion } from "framer-motion"
+import { useMemo } from "react"
 
 
 interface ProjectCardProps {
@@ -15,7 +16,8 @@ const statusColor = {
 }
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
-  const projectTasks = useAppSelector((state) => state.task.tasks.filter(tasks => tasks.projectId === project.id))
+  const tasks = useAppSelector((state) => state.task.tasks)
+  const projectTasks = useMemo(() => tasks.filter(tasks => tasks.projectId === project.id), [tasks, project.id])
   const completedTasks = projectTasks.filter(task => task.status === 'complete').length
   const totalTasks = projectTasks.length
 
