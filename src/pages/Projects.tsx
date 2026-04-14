@@ -1,7 +1,8 @@
 import { ProjectCard } from "@/components/ProjectCard"
 import { AppLayout } from '@/components/AppLayout'
 import { useAppSelector } from "@/hooks/useAppDispatch"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
+import { ProjectModal } from "@/components/ProjectModal"
 
 
 const Projects = () => {
@@ -11,7 +12,7 @@ const Projects = () => {
     <>
       <AppLayout>
         <motion.div
-          className=" mx-10 my-8 flex flex-col lg:grid lg:grid-cols-3  items-start w-full z-50"
+          className=" mx-10 my-8 flex flex-col lg:grid lg:grid-cols-3  items-start w-full"
           initial="hidden"
           animate="visible"
           variants={{
@@ -27,6 +28,9 @@ const Projects = () => {
           )) : <h3 className="text-text-primary bg-bg-secondary flex items-center text-center text-xl p-3 rounded-full">No Projects</h3>}
         </motion.div>
       </AppLayout>
+      <AnimatePresence>
+        <ProjectModal />
+      </AnimatePresence>
     </>
   )
 }

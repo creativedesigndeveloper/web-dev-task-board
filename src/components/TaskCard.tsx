@@ -18,7 +18,7 @@ const priorityColour = {
 
 
 export const TaskCard = ({ task }: TaskCardProps) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id
   })
 
@@ -31,9 +31,9 @@ export const TaskCard = ({ task }: TaskCardProps) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
+      initial={isDragging ? false : { opacity: 0, y: 20 }}
+      animate={isDragging ? false : { opacity: 1, y: 0 }}
+      exit={isDragging ? {} : { opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
     >
 
@@ -46,7 +46,7 @@ export const TaskCard = ({ task }: TaskCardProps) => {
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-text-primary font-bold">{task.title}</h3>
           <div className="flex items-center gap-2 ml-auto">
-            <span {...listeners} className="cursor-grab text-text-secondary px-1 touch-none">⠿</span>
+            <span {...listeners} className="cursor-grab text-text-secondary px-1">⠿</span>
             <span className={`w-3 h-3 rounded-full ${priorityColour[task.priority]}`} />
           </div>
         </div>

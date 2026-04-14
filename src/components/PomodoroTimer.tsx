@@ -43,6 +43,15 @@ const PomodoroTimer = () => {
 
   }
 
+  const resetClock = () => {
+    setIsRunning(current => {
+      const currentClock = current
+
+      setTimeLeft(timeLeft ? 25 * 60 : 5 * 60)
+      return currentClock
+    })
+  }
+
 
 
 
@@ -54,6 +63,7 @@ const PomodoroTimer = () => {
 
           }>{display}</span>
         <span className="text-text-primary bg-purple-accent mx-5 px-12 py-2 text-2xl rounded-2xl" onClick={skipClock}>Skip</span>
+        <span className="text-text-primary bg-purple-accent  px-12 py-2 text-2xl rounded-2xl" onClick={resetClock}>Reset</span>
       </div>
     </>
   )

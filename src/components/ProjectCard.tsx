@@ -1,6 +1,6 @@
 import type { Project } from "@/types/projects"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
-import { deleteProject } from "@/store/projectsSlice"
+import { deleteProject, setSelectedProject } from "@/store/projectsSlice"
 import { deleteProjectToFirestore } from "@/api/projectApi"
 import { motion } from "framer-motion"
 import { useMemo } from "react"
@@ -39,14 +39,14 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         visible: { opacity: 1, y: 0 }
       }}
       transition={{ duration: 0.3 }}
-
+      onClick={() => dispatch(setSelectedProject(project.id))}
     >
       <div className="mb-2 min-w-0 flex-1">
         <div className="flex items-center">
           <span className={`w-6 h-2 rounded-full border-none ${statusColor[project.status]}`} />
           <h3 className="text-text-primary font-bold pl-2 text-xl">{project.title}</h3>
         </div>
-        <div className="text-text-primary bg-purple-accent px-5 py-1 mt-4 rounded-full text-xs max-w-full overflow-hidden line-clamp-2">{project.description}</div>
+        <div className="text-text-primary text-xs bg-purple-accent pl-2 py-1 mt-4 rounded-full max-w-full overflow-hidden line-clamp-3">{project.description}</div>
         <div className="mt-4">
           <span className="text-text-secondary bg-transparent px-2 py-3 text-sm">{project.dueDate}</span>
         </div>

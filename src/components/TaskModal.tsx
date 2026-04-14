@@ -14,6 +14,7 @@ const priorityColour = {
 
 export const TaskModal = () => {
   const selectedTask = useAppSelector((state) => state.task.tasks.find(task => task.id === state.task.selectedTask))
+  const projects = useAppSelector((state) => state.projects.projects)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [newSubTask, setNewSubTask] = useState('')
@@ -25,7 +26,8 @@ export const TaskModal = () => {
     category: selectedTask?.category,
     status: selectedTask?.status,
     priority: selectedTask?.priority,
-    subTasks: selectedTask?.subTasks
+    subTasks: selectedTask?.subTasks,
+    projectId: selectedTask?.projectId
   })
 
   const onAddSubTask = () => {
@@ -57,6 +59,7 @@ export const TaskModal = () => {
       status: selectedTask?.status ?? 'todo',
       priority: selectedTask?.priority ?? 'lowPriority',
       subTasks: selectedTask?.subTasks ?? [],
+      projectId: selectedTask?.projectId ?? ''
     })
     setIsEditing(true)
     return
@@ -87,7 +90,8 @@ export const TaskModal = () => {
       category: editedTask.category ?? selectedTask?.category,
       status: editedTask.status ?? selectedTask?.status,
       priority: editedTask.priority ?? selectedTask?.priority,
-      subTasks: editedTask.subTasks ?? selectedTask?.subTasks
+      subTasks: editedTask.subTasks ?? selectedTask?.subTasks,
+      projectId: editedTask.projectId ?? selectedTask.projectId
     }))
     updateTaskToFirestore({
       ...selectedTask,
@@ -95,7 +99,8 @@ export const TaskModal = () => {
       category: editedTask.category ?? selectedTask?.category,
       status: editedTask.status ?? selectedTask?.status,
       priority: editedTask.priority ?? selectedTask?.priority,
-      subTasks: editedTask.subTasks ?? selectedTask?.subTasks
+      subTasks: editedTask.subTasks ?? selectedTask?.subTasks,
+      projectId: editedTask.projectId ?? selectedTask.projectId
     })
     setIsEditing(false)
   }
@@ -164,6 +169,15 @@ export const TaskModal = () => {
                     <option value="todo">To Do</option>
                     <option value="inProgress">In Progress</option>
                     <option value="complete">Complete</option>
+                  </select>
+                </div>
+                <div>
+                  <h3 className="text-text-primary px-2 my-2 bg-purple-dark rounded-2xl">Project</h3>
+                  <select className="bg-bg-secondary text-text-primary" name="task-project" value={editedTask.projectId} onChange={(e) => setIsEditedTask((prev) => ({ ...prev, projectId: (e.target as HTMLSelectElement).value as typeof editedTask.projectId }))}>
+                    <option value="">None</option>
+                    {projects.map(project => (
+                      <option value={project.id} key={project.id}>{project.title}</option>
+                    ))}
                   </select>
                 </div>
                 <div>
