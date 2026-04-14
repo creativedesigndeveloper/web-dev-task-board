@@ -1,10 +1,9 @@
 import type { Task } from "@/types/task";
 import { setSelectedTask, toggleSubTask } from "@/store/taskSlice";
-import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 import { useDraggable } from "@dnd-kit/core";
 import { motion } from 'framer-motion'
 import { CSS } from '@dnd-kit/utilities'
-import { useMemo } from "react";
 
 interface TaskCardProps {
   task: Task
@@ -22,7 +21,6 @@ export const TaskCard = ({ task }: TaskCardProps) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id
   })
-  const projects = useAppSelector((state) => state.projects.projects)
 
 
   const style = {
