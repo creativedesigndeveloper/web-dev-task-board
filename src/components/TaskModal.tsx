@@ -2,7 +2,7 @@ import { addSubTaskToFirestore, deleteTaskToFirestore, updateTaskToFirestore } f
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
 import { addSubTask, deleteTask, setSelectedTask, toggleSubTask, updateTask } from "@/store/taskSlice";
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const priorityColour = {
