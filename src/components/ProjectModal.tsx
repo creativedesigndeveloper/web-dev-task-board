@@ -47,8 +47,8 @@ export const ProjectModal = () => {
                 <h3 className="text-text-primary font-bold text-2xl">{selectedProject.title}</h3>
                 <span className={`w-8 h-3 rounded-full ${statusColour[selectedProject.status]}`} />
               </div>
-              <span className="text-xs bg-purple-accent text-white px-2 py-1 rounded-lg overflow-hidden line-clamp-3">{selectedProject.description}</span>
-              <button className="text-xs bg-orange-400 text-text-primary px-4 my-2 mx-2 rounded-2xl cursor-pointer">Edit</button>
+              <button className="text-xs bg-orange-400 text-text-primary px-4  rounded-2xl cursor-pointer">Edit</button>
+              <span className="text-xs bg-purple-accent text-white px-2 py-1 my-3 rounded-lg overflow-hidden line-clamp-3">{selectedProject.description}</span>
               {projectTasks.length > 0 ? projectTasks.map((p) => (
 
                 <div key={p.id} className="flex items-center justify-between gap-2 my-2 border-b-2 border-white/40 last:border-b-0">

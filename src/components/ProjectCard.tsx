@@ -1,7 +1,6 @@
 import type { Project } from "@/types/projects"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
-import { deleteProject, setSelectedProject } from "@/store/projectsSlice"
-import { deleteProjectToFirestore } from "@/api/projectApi"
+import { setSelectedProject } from "@/store/projectsSlice"
 import { motion } from "framer-motion"
 import { useMemo } from "react"
 
@@ -20,13 +19,14 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const projectTasks = useMemo(() => tasks.filter(tasks => tasks.projectId === project.id), [tasks, project.id])
   const completedTasks = projectTasks.filter(task => task.status === 'complete').length
   const totalTasks = projectTasks.length
+  const formattedDate = project.dueDate ? new Date(project.dueDate).toLocaleDateString('en-AU', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  })
+    : 'No due date'
 
   const dispatch = useAppDispatch()
-
-  const deleteProjects = () => {
-    dispatch(deleteProject(project.id))
-    deleteProjectToFirestore((project))
-  }
 
 
   return (
@@ -39,31 +39,26 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         visible: { opacity: 1, y: 0 }
       }}
       transition={{ duration: 0.3 }}
-      onClick={() => dispatch(setSelectedProject(project.id))}
     >
       <div className="mb-2 min-w-0 flex-1">
         <div className="flex items-center">
           <span className={`w-6 h-2 rounded-full border-none ${statusColor[project.status]}`} />
-          <h3 className="text-text-primary font-bold pl-2 text-xl">{project.title}</h3>
+          <h3 className="text-text-primary font-bold pl-2 text-xl cursor-pointer" onClick={() => dispatch(setSelectedProject(project.id))}>{project.title}</h3>
+          <div className="min-w-fit shrink-0 pl-6 break-word">
+            <div className="w-full bg-bg-secondary rounded-full h-2 border border-purple-accent">
+              <div
+                className="bg-purple-accent h-2 rounded-full"
+                style={{ width: totalTasks === 0 ? '0%' : `${(completedTasks / totalTasks) * 100}%` }}
+              />
+            </div>
+            <span className="text-text-primary text-xs">{completedTasks}/{totalTasks} tasks</span>
+
+          </div>
         </div>
-        <div className="text-text-primary text-xs bg-purple-accent pl-2 py-1 mt-4 rounded-full max-w-full overflow-hidden line-clamp-3">{project.description}</div>
+        <div className="text-text-primary text-xs bg-purple-accent px-2 py-1 mt-4 rounded-2xl max-w-full overflow-hidden line-clamp-3">{project.description}</div>
         <div className="mt-4">
-          <span className="text-text-secondary bg-transparent px-2 py-3 text-sm">{project.dueDate}</span>
+          <span className="text-text-secondary bg-transparent px-2 py-3 text-sm">{formattedDate}</span>
         </div>
-      </div>
-      <div className="min-w-fit shrink-0 pl-6 break-word">
-        <div className="w-full bg-bg-secondary rounded-full h-2 border border-purple-accent">
-          <div
-            className="bg-purple-accent h-2 rounded-full"
-            style={{ width: totalTasks === 0 ? '0%' : `${(completedTasks / totalTasks) * 100}%` }}
-          />
-        </div>
-        <span className="text-text-primary text-xs">{completedTasks}/{totalTasks} tasks</span>
-        <div>
-
-          <button className="bg-red-500 text-white px-5 rounded-2xl mt-2 cursor-pointer" onClick={deleteProjects}>Delete</button>
-        </div>
-
       </div>
     </motion.div>
   )

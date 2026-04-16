@@ -2,6 +2,7 @@ import { useState } from "react"
 import { addProjectToFirestore } from "@/api/projectApi"
 import { addProject } from "@/store/projectsSlice"
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch"
+import { AnimatePresence, motion } from "framer-motion"
 
 interface AddNewProjectProps {
   onClose: () => void
@@ -16,7 +17,6 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
   const userId = useAppSelector((state) => state.auth.user?.id)
   const dispatch = useAppDispatch()
   const date = new Date()
-
 
 
   const submitProject = (e: React.FormEvent) => {
@@ -47,9 +47,21 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
   }
 
   return (
-    <>
-      <div className="fixed inset-0 bg-black/50 text-center items-center flex justify-center z-80 ">
-        <div className="bg-bg-card rounded-xl w-80 py-6 md:w-180">
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/50 flex items-center justify-center z-80"
+      >
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="bg-bg-card rounded-xl py-6 w-80 md:w-180 text-center"
+        >
+
           <div>
             <h1 className="text-purple-600 capitalize font-bold mb-3 text-2xl justify-center">New Project Info</h1>
           </div>
@@ -84,9 +96,12 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
             </div>
           </form>
 
-        </div>
-      </div>
-    </>
+
+        </motion.div>
+      </motion.div>
+
+
+    </AnimatePresence>
   )
 }
 

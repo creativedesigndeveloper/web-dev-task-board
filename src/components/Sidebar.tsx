@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/hooks/useAppDispatch"
 import { logout } from "@/store/authSlice"
 import AddNewProject from "./AddNewProject"
 import { createPortal } from "react-dom"
+import { AnimatePresence } from "framer-motion"
 
 interface SidebarProps {
   isOpen: boolean
@@ -61,8 +62,8 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
           </div>
         </div>
 
-        {showAddTask && createPortal(<AddTaskForm onClose={() => setShowAddTask(false)} />, document.body)}
-        {showAddProject && createPortal(<AddNewProject onClose={() => setShowAddProject(false)} />, document.body)}
+        {showAddTask && createPortal(<AnimatePresence><AddTaskForm onClose={() => setShowAddTask(false)} /></AnimatePresence>, document.body)}
+        {showAddProject && createPortal(<AnimatePresence><AddNewProject onClose={() => setShowAddProject(false)} /></AnimatePresence>, document.body)}
       </div>
     </>
   )

@@ -2,6 +2,7 @@ import { addTaskToFirestore } from "@/api/taskApi"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { addTask } from "@/store/taskSlice"
 import { useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
 
 interface AddTaskFormProps {
   onClose: () => void
@@ -52,9 +53,19 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
 
 
   return (
-    <>
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-80">
-        <div className="bg-bg-card rounded-xl p-6 w-96 scale-80 text-text-primary text-center md:scale-100">
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/50 flex items-center justify-center z-80">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.8, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="bg-bg-card rounded-xl p-6 w-96 text-text-primary text-center scale-80 md:scale-100"
+        >
           <h1 className="text-3xl m-3 mt-0 text-bold bg-purple-dark/30 rounded-2xl p-2">Task Form</h1>
           <form onSubmit={onSubmit}>
             <div className="mb-2">
@@ -98,8 +109,9 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
               <button className="bg-red-500 p-3 pt-0 pb-0 mt-7 rounded-full cursor-pointer" type="button" onClick={onClose}>Cancel</button>
             </div>
           </form>
-        </div>
-      </div>
-    </>
+
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   )
 }
