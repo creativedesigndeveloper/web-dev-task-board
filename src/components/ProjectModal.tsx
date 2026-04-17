@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { AnimatePresence, motion } from "framer-motion"
-import { deleteProject, setSelectedProject } from "@/store/projectsSlice"
-import { useMemo } from "react"
-import { deleteProjectToFirestore } from "@/api/projectApi"
+import { deleteProject, setSelectedProject, updateProject } from "@/store/projectsSlice"
+import { useMemo, useState } from "react"
+import { deleteProjectToFirestore, updateProjectToFirestore } from "@/api/projectApi"
 
 
 
@@ -12,6 +12,13 @@ export const ProjectModal = () => {
   const selectedProject = useAppSelector((state) => state.projects.projects.find(p => p.id === state.projects.selectedProject))
   const projectTasks = useMemo(() => tasks.filter(task => task.projectId === selectedProject?.id), [tasks, selectedProject?.id])
   const dispatch = useAppDispatch()
+  const [isEditing, setIsEditing] = useState(false)
+  const [editedTask, setIsEditedTask] = useState({
+    title: selectedProject?.title,
+    description: selectedProject?.description,
+    status: selectedProject?.status,
+    dueDate: selectedProject?.dueDate
+  })
 
   const statusColour = {
     active: 'bg-green-400',
@@ -24,8 +31,40 @@ export const ProjectModal = () => {
     deleteProjectToFirestore((selectedProject))
   }
 
+  const editMode = () => {
+    setIsEditedTask({
+      title: selectedProject?.title ?? '',
+      description: selectedProject?.description ?? '',
+      status: selectedProject?.status ?? 'active',
+      dueDate: selectedProject?.dueDate ?? ''
+    })
+    setIsEditing(true)
+  }
+
   const onClose = () => {
     dispatch(setSelectedProject(null))
+  }
+  const onCancel = () => {
+    setIsEditing(false)
+  }
+
+  const onSave = () => {
+    if (!selectedProject) return
+    dispatch(updateProject({
+      ...selectedProject,
+      title: editedTask.title ?? selectedProject?.title,
+      description: editedTask.description ?? selectedProject?.description,
+      status: editedTask.status ?? selectedProject?.status,
+      dueDate: editedTask.dueDate ?? selectedProject?.dueDate
+    }))
+    updateProjectToFirestore({
+      ...selectedProject,
+      title: editedTask.title ?? selectedProject.title,
+      description: editedTask.description ?? selectedProject.description,
+      status: editedTask.status ?? selectedProject.status,
+      dueDate: editedTask.dueDate ?? selectedProject.dueDate
+    })
+    setIsEditing(false)
   }
 
   return (
@@ -44,24 +83,57 @@ export const ProjectModal = () => {
             className="bg-bg-card rounded-xl p-6 w-96">
             <>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-text-primary font-bold text-2xl">{selectedProject.title}</h3>
-                <span className={`w-8 h-3 rounded-full ${statusColour[selectedProject.status]}`} />
+                {isEditing ?
+                  <input
+                    value={editedTask.title}
+                    onChange={(e) => setIsEditedTask((prev) => ({ ...prev, title: e.target.value }))}
+                    className="text-text-primary font-bold text-2xl"></input>
+                  : <h3 className="text-text-primary font-bold text-2xl">{selectedProject.title}</h3>}
+
+                {isEditing ?
+                  <select
+                    value={editedTask.status}
+                    className="text-text-primary"
+                    onChange={(e) => setIsEditedTask((prev) => ({ ...prev, status: (e.target as HTMLSelectElement).value as 'active' | 'archived' }))}>
+                    <option value="active">Active</option>
+                    <option value="archived">Archived</option>
+                  </select>
+                  : <span className={`w-8 h-3 rounded-full ${statusColour[selectedProject.status]}`} />}
               </div>
-              <button className="text-xs bg-orange-400 text-text-primary px-4  rounded-2xl cursor-pointer">Edit</button>
-              <span className="text-xs bg-purple-accent text-white px-2 py-1 my-3 rounded-lg overflow-hidden line-clamp-3">{selectedProject.description}</span>
+              <button className="text-xs bg-orange-400 text-text-primary px-4  rounded-2xl cursor-pointer" onClick={editMode}>Edit</button>
+              {isEditing ? <textarea value={editedTask.description} onChange={(e) => setIsEditedTask((prev) => ({ ...prev, description: e.target.value }))} className="text-xs bg-purple-accent text-white px-2 py-1 my-3 rounded-lg overflow-hidden line-clamp-3"></textarea>
+                : <span className="text-xs bg-purple-accent text-white px-2 py-1 my-3 rounded-lg overflow-hidden line-clamp-3">{selectedProject.description}</span>}
               {projectTasks.length > 0 ? projectTasks.map((p) => (
 
                 <div key={p.id} className="flex items-center justify-between gap-2 my-2 border-b-2 border-white/40 last:border-b-0">
                   <div>
-                    <span className="text-text-primary ml-2">{p.title}</span>
+                    <span className="text-text-primary ml-2 font-bold">{p.title}</span>
                   </div>
                   <button className="flex ml-2 px-4 text-text-primary bg-gray-700 rounded-xl text-xs cursor-pointer">Edit</button>
                 </div>
 
               )) : <div className="text-text-primary bg-gray-500 rounded-2xl w-50 px-2">No current tasks</div>}
+              {isEditing ?
+                <input type="date"
+                  value={editedTask.dueDate}
+                  className="text-text-primary"
+                  onChange={(e) => setIsEditedTask((prev) => ({ ...prev, dueDate: e.target.value }))}></input>
+                : null
+              }
               <div className="flex items-center justify-between">
-                <button className="bg-red-600 px-2 rounded-full mt-4 mb-2 text-text-primary cursor-pointer" onClick={deleteProjects}>Delete</button>
-                <button className="bg-purple-dark px-2 rounded-full mt-4 text-text-primary cursor-pointer" onClick={onClose}>Close</button>
+                {isEditing ?
+                  <>
+                    <button className="bg-red-600 px-2 rounded-full mt-4 mb-2 text-text-primary cursor-pointer"
+                      onClick={onCancel}>Close</button>
+                    <button className="bg-purple-dark px-2 rounded-full mt-4 text-text-primary cursor-pointer"
+                      onClick={onSave}>Update</button>
+                  </>
+                  :
+                  <>
+                    <button className="bg-red-600 px-2 rounded-full mt-4 mb-2 text-text-primary cursor-pointer" onClick={deleteProjects}>Delete</button>
+                    <button className="bg-purple-dark px-2 rounded-full mt-4 text-text-primary cursor-pointer" onClick={onClose}>Close</button>
+                  </>
+                }
               </div>
             </>
 
