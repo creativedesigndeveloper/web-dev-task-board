@@ -57,13 +57,13 @@ const PomodoroTimer = () => {
 
   return (
     <>
-      <div>
-        <span className={`text-text-primary ${isRunning ? 'bg-purple-accent' : 'bg-bg-secondary'} py-1 px-15 rounded-2xl`}
+      <div className="flex flex-col mx-auto w-50 justify-center items-center md:flex-row">
+        <span className={`text-text-primary cursor-pointer ${isRunning ? 'bg-purple-accent' : 'bg-bg-secondary'} py-1 px-15 rounded-2xl`}
           onClick={() => { setIsRunning((prev) => !prev) }
 
           }>{display}</span>
-        <span className="text-text-primary bg-purple-accent mx-5 px-12 py-2 text-2xl rounded-2xl" onClick={skipClock}>Skip</span>
-        <span className="text-text-primary bg-purple-accent  px-12 py-2 text-2xl rounded-2xl" onClick={resetClock}>Reset</span>
+        <span className="text-text-primary bg-purple-accent my-5 md:mx-5 px-12 py-2 text-2xl rounded-2xl cursor-pointer" onClick={skipClock}>Skip</span>
+        <span className="text-text-primary bg-purple-accent  px-12 py-2 text-2xl rounded-2xl cursor-pointer" onClick={resetClock}>Reset</span>
       </div>
     </>
   )

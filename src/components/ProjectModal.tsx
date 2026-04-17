@@ -142,8 +142,9 @@ export const ProjectModal = () => {
                 <button className="bg-bg-secondary text-text-primary px-3 py-1 ml-2 rounded-xl" onClick={addProjectTask}>Add</button>
               </div>
               {projectTasks ? projectTasks.map(project => (
-                <div className="">
+                <div className="flex justify-between items-center mb-2 border-b border-b-white last-of-type:border-b-0">
                   <h3 className="text-text-primary">{project.title}</h3>
+                  <button className="bg-gray-500 text-text-primary text-xs px-3 rounded-2xl">Edit</button>
                 </div>
               ))
                 : null}

@@ -19,7 +19,7 @@ export const KanbanColumn = ({ id, title, count, children }: KanbanColumnProps) 
       }}
       transition={{ duration: 0.3 }}
       ref={setNodeRef}
-      className={`p-3 rounded-2xl flex-1 transition-colors max-w-100 z-10 md:max-w-150 ${isOver ? 'bg-purple-dark' : 'bg-bg-secondary'}`}
+      className={`p-3 rounded-2xl transition-colors w-80 z-10  ${isOver ? 'bg-purple-dark' : 'bg-bg-secondary'}`}
     >
       <h2 className="text-text-primary">{title}</h2>
       <h4 className="text-text-secondary">{count}</h4>
