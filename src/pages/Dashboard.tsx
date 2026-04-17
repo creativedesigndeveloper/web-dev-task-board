@@ -13,6 +13,7 @@ import { subscribeToProjects } from "@/api/projectApi"
 import { setProjects } from "@/store/projectsSlice"
 import type { Task } from '@/types/task'
 
+
 const DashBoard = () => {
   const tasks = useAppSelector((state) => state.task.tasks)
   const todoTasks = useMemo(() => tasks.filter(task => task.status === 'todo'), [tasks])
@@ -22,10 +23,6 @@ const DashBoard = () => {
   const [activeTask, setActiveTask] = useState<Task | null>(null)
 
   const dispatch = useAppDispatch()
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
-  )
   const handleDragStart = (e: DragStartEvent) => {
     const task = [...todoTasks, ...inProgressTasks, ...completeTasks].find(t => t.id === e.active.id)
     setActiveTask(task ?? null)
@@ -71,6 +68,10 @@ const DashBoard = () => {
 
 
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
+  )
 
   return (
     <>
@@ -115,10 +116,10 @@ const DashBoard = () => {
                 ))}
               </KanbanColumn>
 
-              <DragOverlay>
-                {activeTask ? <TaskCard task={activeTask} /> : null}
-              </DragOverlay>
             </motion.div>
+            <DragOverlay>
+              {activeTask ? <TaskCard task={activeTask} /> : null}
+            </DragOverlay>
           </main>
         </DndContext>
       </AppLayout>

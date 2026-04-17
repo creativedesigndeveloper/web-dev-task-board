@@ -48,9 +48,9 @@ export const TaskCard = ({ task }: TaskCardProps) => {
 
   return (
     <motion.div
-      initial={isDragging ? false : { opacity: 0, y: 20 }}
-      animate={isDragging ? false : { opacity: 1, y: 0 }}
-      exit={isDragging ? {} : { opacity: 0, y: -20 }}
+      initial={isDragging ? { opacity: 0 } : { opacity: 0, y: 20 }}
+      animate={isDragging ? { opacity: 0 } : { opacity: 1, y: 0 }}
+      exit={isDragging ? { opacity: 0 } : { opacity: 0, y: -20 }}
       transition={{ duration: 0.2 }}
     >
 
@@ -59,11 +59,11 @@ export const TaskCard = ({ task }: TaskCardProps) => {
         ref={setNodeRef}
         style={style}
         {...attributes}
-        className="bg-bg-card rounded-xl p-4 mb-3 border border-purple-accent flex flex-col min-w-60 md:block">
+        className="bg-bg-card rounded-xl p-4 mb-3 border border-purple-accent z-95 flex flex-col min-w-60 md:block">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-text-primary font-bold cursor-pointer" onClick={() => dispatch(setSelectedTask(task.id))}>{task.title}</h3>
           <div className="flex items-center gap-2 ml-auto">
-            <span {...listeners} className="cursor-grab text-text-secondary px-1">⠿</span>
+            <span {...listeners} className="cursor-grab text-text-secondary px-1 touch-none">⠿</span>
             <span className={`w-3 h-3 rounded-full ${priorityColour[task.priority]}`} />
           </div>
         </div>

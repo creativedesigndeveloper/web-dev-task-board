@@ -16,9 +16,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
       {/*  Sidebar */}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       {/*  main content area */}
-      <main>
-        {children}
-      </main>
+      {children}
     </div>
   )
 
