@@ -2,7 +2,7 @@ import { addSubTaskToFirestore, deleteTaskToFirestore, updateTaskToFirestore } f
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppDispatch";
 import { addSubTask, deleteTask, setSelectedTask, updateTask } from "@/store/taskSlice";
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const priorityColour = {
@@ -16,11 +16,6 @@ export const TaskModal = () => {
   const selectedTask = useAppSelector((state) => state.task.tasks.find(task => task.id === state.task.selectedTask))
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const projects = useAppSelector((state) => state.projects.projects)
-  const taskProject = () => {
-    if (!selectedTask) return
-    useMemo(() => projects.find(project => project.id === selectedTask.projectId), [projects, selectedTask.projectId])
-  }
   const [newSubTask, setNewSubTask] = useState('')
   const [isEditing, setIsEditing] = useState(false)
   const [editingSubTaskId, setEditingSubTaskId] = useState<string | null>(null)
@@ -182,8 +177,6 @@ export const TaskModal = () => {
                     onChange={(e) => setIsEditedTask((prev) => ({ ...prev, category: e.target.value }))}
                     className="text-xs bg-purple-accent text-white px-2 py-1 rounded-lg"></input> :
                     <span className="text-xs bg-purple-accent text-white px-2 py-1 rounded-lg mr-2">{selectedTask.category}</span>}
-                  {taskProject && <span className="text-xs bg-blue-400 text-white px-2 py-1 rounded-lg">{taskProject.title}</span>}
-
                 </div>
                 <h4 className="text-text-primary font-bold bg-bg-secondary pl-2 my-3">Subtasks</h4>
                 <div className="flex gap-2 my-3">
