@@ -19,7 +19,7 @@ const FocusPage = () => {
   const nextTask = tasks.find(task => task.status === focusTask?.status && task.id !== taskId)
   return (
     <>
-      <div className="flex  bg-bg-primary min-h-screen">
+      <div className="flex">
         <div className=" flex-1 max-w-screen mx-auto px-4 py-10">
 
 
@@ -63,7 +63,7 @@ const FocusPage = () => {
                 {nextTask?.title ?? 'No more new tasks!'}
               </div>
             </div>
-            <div className=" text-4xl mt-20 text-center">
+            <div className=" text-4xl mt-20 text-center z-80">
               <PomodoroTimer />
             </div>
           </div>

@@ -3,10 +3,8 @@ import { AnimatePresence, motion } from "framer-motion"
 import { deleteProject, setSelectedProject, updateProject } from "@/store/projectsSlice"
 import { useMemo, useState } from "react"
 import { deleteProjectToFirestore, updateProjectToFirestore } from "@/api/projectApi"
-import { addTask } from "@/store/taskSlice"
-import { addTaskToFirestore } from "@/api/taskApi"
-
-
+import { addTask, deleteTask, updateTask } from "@/store/taskSlice"
+import { addTaskToFirestore, deleteTaskToFirestore, updateTaskToFirestore } from "@/api/taskApi"
 
 
 export const ProjectModal = () => {
@@ -18,6 +16,8 @@ export const ProjectModal = () => {
   const dispatch = useAppDispatch()
   const [text, setText] = useState('')
   const [isEditing, setIsEditing] = useState(false)
+  const [editingProjectTaskId, setEditingProjectTaskId] = useState<string | null>(null)
+  const [editingProjectTaskValue, setEditingProjectTaskValue] = useState('')
   const [editedTask, setIsEditedTask] = useState({
     title: selectedProject?.title,
     description: selectedProject?.description,
@@ -60,6 +60,14 @@ export const ProjectModal = () => {
     deleteProjectToFirestore((selectedProject))
   }
 
+  const handleDeleteTask = (taskId: string) => {
+    const task = tasks.find(t => t.id === taskId)
+    if (!task) return
+
+    dispatch(deleteTask(task.id))
+    deleteTaskToFirestore(task)
+  }
+
   const editMode = () => {
     setIsEditedTask({
       title: selectedProject?.title ?? '',
@@ -68,6 +76,15 @@ export const ProjectModal = () => {
       dueDate: selectedProject?.dueDate ?? ''
     })
     setIsEditing(true)
+  }
+
+  const editProjectTask = (taskId: string) => {
+    const taskToUpdate = tasks.find(t => t.id === taskId)
+    if (!taskToUpdate) return
+
+    const updatedTask = { ...taskToUpdate, title: editingProjectTaskValue }
+    dispatch(updateTask(updatedTask))
+    updateTaskToFirestore(updatedTask)
   }
 
   const onClose = () => {
@@ -141,10 +158,19 @@ export const ProjectModal = () => {
                   placeholder="Add task..." />
                 <button className="bg-bg-secondary text-text-primary px-3 py-1 ml-2 rounded-xl" onClick={addProjectTask}>Add</button>
               </div>
-              {projectTasks ? projectTasks.map(project => (
+              {projectTasks ? projectTasks.map(task => (
                 <div className="flex justify-between items-center mb-2 border-b border-b-white last-of-type:border-b-0">
-                  <h3 className="text-text-primary">{project.title}</h3>
-                  <button className="bg-gray-500 text-text-primary text-xs px-3 rounded-2xl">Edit</button>
+                  {task.id === editingProjectTaskId ?
+                    <input value={editingProjectTaskValue} onChange={(e) => setEditingProjectTaskValue(e.target.value)} className="text-text-primary" />
+                    : <h3 className="text-text-primary">{task.title}</h3>}
+                  <div>
+                    {task.id === editingProjectTaskId ? <button className="bg-green-500 text-text-primary text-xs px-3 rounded-2xl cursor-pointer" onClick={() => { editProjectTask(task.id) }}>Update</button> : <button className="bg-gray-500 text-text-primary text-xs px-3 rounded-2xl cursor-pointer" onClick={() => {
+                      setEditingProjectTaskId(task.id)
+                      setEditingProjectTaskValue(task.title)
+                    }}>Edit</button>}
+                    <button className="text-text-primary bg-red-500 px-2 ml-2 text-xs rounded-2xl cursor-pointer" onClick={() => { handleDeleteTask(task.id) }}>Delete</button>
+
+                  </div>
                 </div>
               ))
                 : null}
