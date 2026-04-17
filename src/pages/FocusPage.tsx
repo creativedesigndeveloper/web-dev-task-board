@@ -37,20 +37,19 @@ const FocusPage = () => {
           <div className="relative flex items-center">
             <div className="absolute border-t-2 w-full border-purple-200/60" />
             <span className=" bg-bg-primary p-5 text-text-primary relative text-left font-extrabold">Steps</span>
-            <div className="flex-1 text-center mt-2">
-              {
-                focusTask?.subTasks.map((subtask) => (
-                  <div key={subtask.id} className="relative mx-10">
-                    <CustomCheckbox checked={subtask.isCompleted} onChange={(_checked) =>
-                      dispatch(toggleSubTask({
-                        taskId: focusTask.id,
-                        subTaskId: subtask.id
-                      }))}
-                      label={subtask.title} />
-                  </div>
-                ))}
-            </div>
-
+          </div>
+          <div className="">
+            {
+              focusTask?.subTasks.map((subtask) => (
+                <div key={subtask.id} className=" mx-10">
+                  <CustomCheckbox checked={subtask.isCompleted} onChange={(_checked) =>
+                    dispatch(toggleSubTask({
+                      taskId: focusTask.id,
+                      subTaskId: subtask.id
+                    }))}
+                    label={subtask.title} />
+                </div>
+              ))}
           </div>
 
 
@@ -64,9 +63,9 @@ const FocusPage = () => {
                 {nextTask?.title ?? 'No more new tasks!'}
               </div>
             </div>
-          </div>
-          <div className=" text-4xl mt-20 text-center">
-            <PomodoroTimer />
+            <div className=" text-4xl mt-20 text-center">
+              <PomodoroTimer />
+            </div>
           </div>
         </div>
       </div>
