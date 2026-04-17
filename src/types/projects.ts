@@ -4,7 +4,7 @@ export interface Project {
   description: string,
   status: 'active' | 'archived',
   dueDate: string,
-  createdAt: string
+  createdAt: string,
 }
 
 export interface ProjectState {

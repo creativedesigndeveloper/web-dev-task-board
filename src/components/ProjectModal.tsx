@@ -3,15 +3,20 @@ import { AnimatePresence, motion } from "framer-motion"
 import { deleteProject, setSelectedProject, updateProject } from "@/store/projectsSlice"
 import { useMemo, useState } from "react"
 import { deleteProjectToFirestore, updateProjectToFirestore } from "@/api/projectApi"
+import { addTask } from "@/store/taskSlice"
+import { addTaskToFirestore } from "@/api/taskApi"
 
 
 
 
 export const ProjectModal = () => {
-  const tasks = useAppSelector((state) => state.task.tasks)
   const selectedProject = useAppSelector((state) => state.projects.projects.find(p => p.id === state.projects.selectedProject))
+  const tasks = useAppSelector((state) => state.task.tasks)
   const projectTasks = useMemo(() => tasks.filter(task => task.projectId === selectedProject?.id), [tasks, selectedProject?.id])
+  const userId = useAppSelector((state) => state.auth.user?.id)
+
   const dispatch = useAppDispatch()
+  const [text, setText] = useState('')
   const [isEditing, setIsEditing] = useState(false)
   const [editedTask, setIsEditedTask] = useState({
     title: selectedProject?.title,
@@ -23,6 +28,30 @@ export const ProjectModal = () => {
   const statusColour = {
     active: 'bg-green-400',
     archived: 'bg-orange-500'
+  }
+
+  const addProjectTask = () => {
+    if (!userId) return
+    const id = crypto.randomUUID()
+    dispatch(addTask({
+      title: text,
+      id: id,
+      category: 'New Task',
+      status: 'todo',
+      priority: 'lowPriority',
+      projectId: selectedProject?.id,
+      subTasks: [],
+    }))
+    addTaskToFirestore({
+      title: text,
+      id: id,
+      category: 'New Task',
+      status: 'todo',
+      priority: 'lowPriority',
+      projectId: selectedProject?.id,
+      subTasks: [],
+    }, userId)
+    setText('')
   }
 
   const deleteProjects = () => {
@@ -103,16 +132,22 @@ export const ProjectModal = () => {
               <button className="text-xs bg-orange-400 text-text-primary px-4  rounded-2xl cursor-pointer" onClick={editMode}>Edit</button>
               {isEditing ? <textarea value={editedTask.description} onChange={(e) => setIsEditedTask((prev) => ({ ...prev, description: e.target.value }))} className="text-xs bg-purple-accent text-white px-2 py-1 my-3 rounded-lg overflow-hidden line-clamp-3"></textarea>
                 : <span className="text-xs bg-purple-accent text-white px-2 py-1 my-3 rounded-lg overflow-hidden line-clamp-3">{selectedProject.description}</span>}
-              {projectTasks.length > 0 ? projectTasks.map((p) => (
-
-                <div key={p.id} className="flex items-center justify-between gap-2 my-2 border-b-2 border-white/40 last:border-b-0">
-                  <div>
-                    <span className="text-text-primary ml-2 font-bold">{p.title}</span>
-                  </div>
-                  <button className="flex ml-2 px-4 text-text-primary bg-gray-700 rounded-xl text-xs cursor-pointer">Edit</button>
+              <div className="flex mb-3">
+                <input type="text"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') addProjectTask() }}
+                  className="bg-bg-secondary text-text-primary rounded-md w-full px-2"
+                  placeholder="Add task..." />
+                <button className="bg-bg-secondary text-text-primary px-3 py-1 ml-2 rounded-xl" onClick={addProjectTask}>Add</button>
+              </div>
+              {projectTasks ? projectTasks.map(project => (
+                <div className="">
+                  <h3 className="text-text-primary">{project.title}</h3>
                 </div>
+              ))
+                : null}
 
-              )) : <div className="text-text-primary bg-gray-500 rounded-2xl w-50 px-2">No current tasks</div>}
               {isEditing ?
                 <input type="date"
                   value={editedTask.dueDate}
