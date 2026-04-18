@@ -21,6 +21,9 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
 
   const submitProject = (e: React.FormEvent) => {
     e.preventDefault()
+    if (title === '') return
+    if (description === '') return
+    if (dueDate === '') return
     const id = crypto.randomUUID()
     if (!userId) return
     dispatch(addProject({

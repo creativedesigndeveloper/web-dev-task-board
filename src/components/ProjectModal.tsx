@@ -32,6 +32,7 @@ export const ProjectModal = () => {
 
   const addProjectTask = () => {
     if (!userId) return
+    if (text === '') return
     const id = crypto.randomUUID()
     dispatch(addTask({
       title: text,

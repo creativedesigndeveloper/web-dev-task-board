@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import { ProjectDashboard } from "@/pages/ProjectDashboard";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import DashBoard from "@/pages/Dashboard";
 import FocusPage from "@/pages/FocusPage";
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
           {
             path: '/projects',
             element: <Projects />
+          },
+          {
+            path: `/projects/:projectId`,
+            element: <ProjectDashboard />
           },
           {
             path: '/focus',

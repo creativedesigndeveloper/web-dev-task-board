@@ -22,6 +22,8 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (text === '') return
+    if (category === '') return
     const id = crypto.randomUUID()
     if (!userId) return
     dispatch(addTask({
@@ -70,7 +72,9 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
           <form onSubmit={onSubmit}>
             <div className="mb-2">
               <h3 className="bg-purple-accent rounded-2xl">Task</h3>
-              <input className="p-2 m-2 bg-bg-secondary rounded-lg text-text-primary w-full" type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter Task" />
+              <input className="p-2 m-2 bg-bg-secondary rounded-lg text-text-primary w-full" type="text" value={text} onChange={(e) => {
+                setText(e.target.value)
+              }} placeholder="Enter Task" />
             </div>
             <div className="mb-2">
               <h3 className="bg-purple-accent rounded-2xl">Category</h3>

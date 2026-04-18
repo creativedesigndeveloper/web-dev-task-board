@@ -1,8 +1,7 @@
 import { ProjectCard } from "@/components/ProjectCard"
 import { AppLayout } from '@/components/AppLayout'
 import { useAppSelector } from "@/hooks/useAppDispatch"
-import { AnimatePresence, motion } from "framer-motion"
-import { ProjectModal } from "@/components/ProjectModal"
+import { motion } from "framer-motion"
 
 
 const Projects = () => {
@@ -28,9 +27,6 @@ const Projects = () => {
           )) : <h3 className="text-text-primary bg-bg-secondary flex items-center text-center text-xl p-3 rounded-full">No Projects</h3>}
         </motion.div>
       </AppLayout>
-      <AnimatePresence>
-        <ProjectModal />
-      </AnimatePresence>
     </>
   )
 }

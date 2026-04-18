@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
 import { setSelectedProject } from "@/store/projectsSlice"
 import { motion } from "framer-motion"
 import { useMemo } from "react"
+import { useNavigate } from "react-router-dom"
 
 
 interface ProjectCardProps {
@@ -27,6 +28,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     : 'No due date'
 
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
 
   return (
@@ -43,7 +45,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       <div className="mb-2 min-w-0 flex-1">
         <div className="flex items-center">
           <span className={`w-6 h-2 rounded-full border-none ${statusColor[project.status]}`} />
-          <h3 className="text-text-primary font-bold pl-2 text-xl cursor-pointer" onClick={() => dispatch(setSelectedProject(project.id))}>{project.title}</h3>
+          <h3 className="text-text-primary font-bold pl-2 text-xl cursor-pointer" onClick={() => {
+            dispatch(setSelectedProject(project.id))
+            navigate(`/projects/${project.id}`)
+          }}
+
+          >{project.title}</h3>
           <div className="min-w-fit shrink-0 pl-6 break-word">
             <div className="w-full bg-bg-secondary rounded-full h-2 border border-purple-accent">
               <div
