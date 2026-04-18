@@ -15,5 +15,5 @@ Live: (https://web-dev-task-board.vercel.app)
 | Styling | Tailwind CSS v4 |
 | Animations | Framer Motion |
 | Drag and Drop | dnd-kit |
-| Auth | Firebase Authentication (email/password |
+| Auth | Firebase Authentication (email/password) |
 | Database | Firestore (real-time)
