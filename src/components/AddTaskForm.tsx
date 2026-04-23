@@ -13,8 +13,7 @@ export const AddTaskForm = ({ onClose }: AddTaskFormProps) => {
   const [category, setCategory] = useState('')
   const [status, setStatus] = useState<'todo' | 'inProgress' | 'complete'>('todo')
   const [priority, setPriority] = useState<'highPriority' | 'midPriority' | 'lowPriority'>('lowPriority')
-  const projects = useAppSelector((state) => state.projects.projects)
-  const [projectId, setProjectId] = useState('')
+  const [projectId, _setProjectId] = useState('')
   const [error, setError] = useState('')
   const userId = useAppSelector((state) => state.auth.user?.id)
 
