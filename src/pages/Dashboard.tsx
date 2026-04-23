@@ -78,6 +78,7 @@ const DashBoard = () => {
       <AppLayout>
         <DndContext sensors={sensors} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
           <main className="flex-1 p-6">
+            <h1 className='flex items-center justify-center text-4xl text-text-primary p-5 my-2 font-bold'>Task Board</h1>
             <motion.div
               className="flex gap-6 text-text-primary flex-col mx-15 md:flex-row"
               initial="hidden"

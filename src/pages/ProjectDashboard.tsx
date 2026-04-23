@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { DndContext, PointerSensor, TouchSensor, useSensor, useSensors, DragOverlay, type DragEndEvent, type DragStartEvent } from "@dnd-kit/core"
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppDispatch"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { updateTask, setTasks } from "@/store/taskSlice"
 import { updateTaskToFirestore, subscribeToTasks } from "@/api/taskApi"
 import { KanbanColumn } from "@/components/KanbanColumn"
@@ -20,9 +20,9 @@ export const ProjectDashboard = () => {
   const dispatch = useAppDispatch()
   const selectedProject = useAppSelector((state) => state.projects.projects.find(p => p.id === state.projects.selectedProject))
   const projectTasks = useAppSelector((state) => state.task.tasks.filter(task => task.projectId === projectId))
-  const todoTasks = projectTasks.filter(task => task.status === 'todo')
-  const inProgressTasks = projectTasks.filter(task => task.status === 'inProgress')
-  const completeTasks = projectTasks.filter(task => task.status === 'complete')
+  const todoTasks = useMemo(() => projectTasks.filter(task => task.status === 'todo'), [projectTasks])
+  const inProgressTasks = useMemo(() => projectTasks.filter(task => task.status === 'inProgress'), [projectTasks])
+  const completeTasks = useMemo(() => projectTasks.filter(task => task.status === 'complete'), [projectTasks])
   const userId = useAppSelector((state) => state.auth.user?.id)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
 
@@ -75,11 +75,11 @@ export const ProjectDashboard = () => {
 
   return (
     <>
-      <h1 className="flex items-center justify-center text-3xl text-text-primary p-5 font-bold">{selectedProject?.title}</h1>
+      <h1 className="flex items-center justify-center text-2xl md:text-3xl text-text-primary p-5 font-bold">{selectedProject?.title}</h1>
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
         <main className="p-6">
           <motion.div
-            className="flex gap-6 text-text-primary flex-col mx-50 md:flex-row 2xl:mx-96"
+            className="flex gap-6 text-text-primary flex-col  sm:mx-50 lg:flex-row 2xl:mx-96"
             initial="hidden"
             animate="visible"
             variants={{

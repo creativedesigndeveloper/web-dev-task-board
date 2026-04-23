@@ -73,6 +73,7 @@ export const TaskCard = ({ task }: TaskCardProps) => {
         </div>
         {
           <>
+            {task.subTasks.length > 0 ? <h3 className="my-2 bg-bg-secondary px-3 font-bold rounded-2xl">Subtasks</h3> : null}
             {task.subTasks.filter(st => st.isCompleted === false).map(subtask => (
               <div key={subtask.id} className="flex-1 items-center gap-2 mt-1 border-b-2 border-white/40 last:border-b-0">
                 <input

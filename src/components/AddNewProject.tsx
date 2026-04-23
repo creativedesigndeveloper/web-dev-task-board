@@ -14,6 +14,7 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
   const [description, setDescription] = useState('')
   const [status, setStatus] = useState<'active' | 'archived'>('active')
   const [dueDate, setDueDate] = useState('')
+  const [error, setError] = useState('')
   const userId = useAppSelector((state) => state.auth.user?.id)
   const dispatch = useAppDispatch()
   const date = new Date()
@@ -21,9 +22,13 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
 
   const submitProject = (e: React.FormEvent) => {
     e.preventDefault()
-    if (title === '') return
-    if (description === '') return
-    if (dueDate === '') return
+    if (title === '' || description === '' || dueDate === '') {
+      setError('Enter all fields')
+      setTimeout(() => {
+        setError('')
+      }, 3000)
+      return
+    }
     const id = crypto.randomUUID()
     if (!userId) return
     dispatch(addProject({
@@ -69,28 +74,25 @@ const AddNewProject = ({ onClose }: AddNewProjectProps) => {
             <h1 className="text-purple-600 capitalize font-bold mb-3 text-2xl justify-center">New Project Info</h1>
           </div>
           <form onSubmit={submitProject}>
-            <div className="flex items-center justify-center gap-6 flex-col md:flex-row">
+            <div className="flex items-center justify-center flex-col md:flex-row">
               <div>
                 <h2 className="text-white font-bold">Title</h2>
                 <input type="text" value={title} placeholder="Enter Project Name" className="bg-bg-primary border-2 border-purple-accent text-white px-3 py-1 my-2 rounded-2xl" onChange={(e) => setTitle(e.target.value)} />
-              </div>
-              <div>
                 <h2 className="text-white font-bold">Description</h2>
-                <textarea value={description} placeholder="Enter description" className="bg-bg-primary border-2 border-purple-accent text-white px-3 py-1 my-2 rounded-2xl" onChange={(e) => setDescription(e.target.value)} />
+                <textarea value={description} placeholder="Enter description" cols={25} className="bg-bg-primary border-2 border-purple-accent text-white px-3 py-1 my-2 rounded-2xl" onChange={(e) => setDescription(e.target.value)} />
               </div>
               <div>
                 <h2 className="text-white font-bold">Due Date</h2>
                 <input type="date" placeholder="Enter due date" className="text-white bg-bg-primary border-2 border-purple-accent px-3 py-1 my-2 rounded-2xl" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+                <h2 className="text-white font-bold">Status</h2>
+                <select className="text-white bg-bg-primary px-10 py-1 my-2" value={status} onChange={(e) => setStatus((e.target as HTMLSelectElement).value as 'active' | 'archived')}>
+                  <option value="active">Active</option>
+                  <option value="archived">Archived</option>
+                </select>
               </div>
 
             </div>
-            <div>
-              <h2 className="text-white font-bold">Status</h2>
-              <select className="text-white bg-bg-primary px-10 py-1 my-2" value={status} onChange={(e) => setStatus((e.target as HTMLSelectElement).value as 'active' | 'archived')}>
-                <option value="active">Active</option>
-                <option value="archived">Archived</option>
-              </select>
-            </div>
+            <p className="text-red-500">{error}</p>
             <div>
               <button type="submit" className="text-text-primary bg-purple-accent text-center px-4 py-2 mt-6 rounded-full cursor-pointer" >Add New Project</button>
             </div>

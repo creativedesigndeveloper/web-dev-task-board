@@ -27,7 +27,7 @@ const LoginPage = () => {
       navigate('/dashboard')
       setEmail('')
       setPassword('')
-    } catch (err) {
+    } catch (error) {
       setError('Invalid email or password, please try again')
     }
   }
