@@ -13,7 +13,7 @@ const Projects = () => {
   return (
     <AppLayout>
       <motion.div
-        className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 p-6 self-start min-w-0 flex-1 w-full"
+        className=" grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-10 p-6 self-start  flex-1 w-full"
         initial="hidden"
         animate="visible"
         variants={{

@@ -11,6 +11,7 @@ import type { Task } from "@/types/task"
 import { subscribeToProjects } from "@/api/projectApi"
 import { setProjects } from "@/store/projectsSlice"
 import { TaskModal } from "@/components/TaskModal"
+import { AddProjectTaskForm } from "@/components/AddProjectTaskForm"
 
 
 
@@ -25,6 +26,7 @@ export const ProjectDashboard = () => {
   const completeTasks = useMemo(() => projectTasks.filter(task => task.status === 'complete'), [projectTasks])
   const userId = useAppSelector((state) => state.auth.user?.id)
   const [activeTask, setActiveTask] = useState<Task | null>(null)
+  const [showAddTask, setShowAddTask] = useState(false)
 
   const handleDragStart = (e: DragStartEvent) => {
     const task = [...todoTasks, ...inProgressTasks, ...completeTasks].find(t => t.id === e.active.id)
@@ -75,57 +77,63 @@ export const ProjectDashboard = () => {
 
   return (
     <>
-      <h1 className="flex items-center justify-center text-2xl md:text-3xl text-text-primary p-5 font-bold">{selectedProject?.title}</h1>
-      <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
-        <main className="p-6">
-          <motion.div
-            className="flex gap-6 text-text-primary flex-col  sm:mx-50 lg:flex-row 2xl:mx-96"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              visible: {
-                transition: {
-                  staggerChildren: 0.15
+      <div className="flex items-center justify-center">
+        <h1 className=" text-2xl md:text-3xl text-text-primary p-5 font-bold">{selectedProject?.title}</h1>
+        <button className="text-text-primary bg-purple-accent px-3 py-2 rounded-xl cursor-pointer" onClick={() => setShowAddTask(true)}>+ Add Task</button>
+      </div>
+      <div className="flex gap-6 p-6">
+        <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} sensors={sensors}>
+          <main className="flex-1 p-6">
+            <motion.div
+              className="flex gap-6 text-text-primary flex-col  sm:mx-50 lg:flex-row 2xl:mx-96"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: {
+                  transition: {
+                    staggerChildren: 0.15
+                  }
                 }
-              }
-            }}
+              }}
 
-          >
-            <KanbanColumn id="todo" title="To Do" count={todoTasks.length}>
-              {todoTasks.map(task => (
-                <TaskCard key={task.id} task={task}
-                  {...task.subTasks.map(subtask => (
-                    <div key={subtask.id}>{subtask.title}</div>
-                  ))}
-                />
-              ))}
-            </KanbanColumn>
-            <KanbanColumn id="inProgress" title="In Progress" count={inProgressTasks.length}>
-              {inProgressTasks.map(task => (
-                <TaskCard key={task.id} task={task}
-                />
-              ))}
-            </KanbanColumn>
-            <KanbanColumn id="complete" title="Complete" count={completeTasks.length}>
-              {completeTasks.map(task => (
-                <TaskCard key={task.id} task={task}
-                  {...task.subTasks.map(subtask => (
-                    <div key={subtask.id}>{subtask.title}</div>
-                  ))}
-                />
-              ))}
-            </KanbanColumn>
+            >
+              <KanbanColumn id="todo" title="To Do" count={todoTasks.length}>
+                {todoTasks.map(task => (
+                  <TaskCard key={task.id} task={task}
+                    {...task.subTasks.map(subtask => (
+                      <div key={subtask.id}>{subtask.title}</div>
+                    ))}
+                  />
+                ))}
+              </KanbanColumn>
+              <KanbanColumn id="inProgress" title="In Progress" count={inProgressTasks.length}>
+                {inProgressTasks.map(task => (
+                  <TaskCard key={task.id} task={task}
+                  />
+                ))}
+              </KanbanColumn>
+              <KanbanColumn id="complete" title="Complete" count={completeTasks.length}>
+                {completeTasks.map(task => (
+                  <TaskCard key={task.id} task={task}
+                    {...task.subTasks.map(subtask => (
+                      <div key={subtask.id}>{subtask.title}</div>
+                    ))}
+                  />
+                ))}
+              </KanbanColumn>
 
-          </motion.div>
-          <DragOverlay>
-            {activeTask ? <TaskCard task={activeTask} /> : null}
-          </DragOverlay>
-        </main>
+            </motion.div>
+            <DragOverlay>
+              {activeTask ? <TaskCard task={activeTask} /> : null}
+            </DragOverlay>
+          </main>
 
-      </DndContext>
+        </DndContext>
+      </div>
       <AnimatePresence>
         <TaskModal />
       </AnimatePresence>
+      {showAddTask && <AddProjectTaskForm projectId={projectId ?? ''} onClose={() => setShowAddTask(false)} />}
     </>
   )
 }

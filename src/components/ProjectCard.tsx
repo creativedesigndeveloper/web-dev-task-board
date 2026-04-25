@@ -35,7 +35,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
 
     <motion.div
-      className="border-purple-accent border rounded-xl p-6 flex w-full mx-auto " style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}
+      className="border-purple-accent border rounded-xl p-6 flex w-full mx-auto z-10" style={{ background: 'linear-gradient(135deg, #1e1b35, #2d1f5e)' }}
       variants={{
         hidden: { opacity: 0, y: 30 },
         visible: { opacity: 1, y: 0 }
